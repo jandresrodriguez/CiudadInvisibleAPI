@@ -40,8 +40,18 @@
     <%= f.text_field :category %>
   </div>
   <div class="field">
-    <%= f.file_field :photo %>
+    <div class="newPaperclipFiles">
+       <%= f.fields_for :assets do |asset| %>
+        
+           <% if asset.object.new_record? %>
+                 <%= asset.file_field :file %>
+           <% end %>
+
+       <% end %>
+    </div>
   </div>
+
+  
   <div class="actions">
     <%= f.submit %>
   </div>

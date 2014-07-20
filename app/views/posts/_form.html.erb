@@ -42,15 +42,12 @@
   <div class="field">
     <div class="newPaperclipFiles">
        <%= f.fields_for :assets do |asset| %>
-        
            <% if asset.object.new_record? %>
                  <%= asset.file_field :file %>
            <% end %>
-
        <% end %>
     </div>
   </div>
-
   
   <div class="actions">
     <%= f.submit %>

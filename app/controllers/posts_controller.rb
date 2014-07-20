@@ -22,6 +22,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
+    @post = Post.find(params[:id])
+    5.times { @post.assets.build }
   end
 
   # POST /posts

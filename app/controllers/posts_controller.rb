@@ -33,6 +33,11 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
+        if params[:assets_attributes]
+          params[:assets_attributes].each { |key, photo|
+            @post.assets.create(file: photo)
+          }
+        end
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
       else
@@ -74,6 +79,7 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :author, :description, :image, :date, :location, :category, :photo)
+      params.require(:post).permit(:title, :author, :description, :image, :date, :location, :category, assets_attributes: [:id, :post_id, :file]) 
+      #params.require(:post).permit!
     end
 end

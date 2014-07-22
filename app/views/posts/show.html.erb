@@ -36,10 +36,10 @@
 </p>
 
 <p>
-  <strong>Photo:</strong>
-  <%= image_tag @post.photo.url %>
-  <%= image_tag @post.photo.url(:medium) %>
-  <%= image_tag @post.photo.url(:thumb) %>
+  <strong>Files:</strong>
+  <% @post.assets.each do |asset| %>
+    <%= image_tag asset.file.url %>
+  <% end %>
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |

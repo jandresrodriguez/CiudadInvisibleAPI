@@ -40,14 +40,15 @@ class PostsController < ApplicationController
         else
           # Si no recibe en el assets_atributes controlo si bien en base64
           if params[:assets_images]
-            # Crea la imagen a partir del data
-            data = StringIO.new(Base64.decode64(params[:assets_images][:data]))
-            data.class.class_eval { attr_accessor :original_filename, :content_type }
-            data.original_filename = params[:assets_images][:filename]
-            data.content_type = params[:assets_images][:content_type]
-            
-            @post.assets.create(file: data)
-
+            params[:assets_images].each { |image|
+              # Crea la imagen a partir del data
+              data = StringIO.new(Base64.decode64(image[:data]))
+              data.class.class_eval { attr_accessor :original_filename, :content_type }
+              data.original_filename = image[:filename]
+              data.content_type = image[:content_type]
+              
+              @post.assets.create(file: data)
+            }
           end
         end
         format.html { redirect_to @post, notice: 'Post was successfully created.' }

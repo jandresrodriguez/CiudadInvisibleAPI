@@ -37,6 +37,18 @@ class PostsController < ApplicationController
           params[:assets_attributes].each { |key, photo|
             @post.assets.create(file: photo)
           }
+        else
+          # Si no recibe en el assets_atributes controlo si bien en base64
+          if params[:assets_images]
+            # Crea la imagen a partir del data
+            data = StringIO.new(Base64.decode64(params[:assets_images][:data]))
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = params[:assets_images][:filename]
+            data.content_type = params[:assets_images][:content_type]
+            
+            @post.assets.create(file: data)
+
+          end
         end
         format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render :show, status: :created, location: @post }
@@ -79,7 +91,8 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :author, :description, :image, :date, :location, :category, assets_attributes: [:id, :post_id, :file]) 
+      params.require(:post).permit(:title, :author, :description, :image, :date, :location, :category, assets_attributes: [:id, :post_id, :file])#, assets_images: [:data, :filename, :content_type]) 
       #params.require(:post).permit!
     end
+
 end

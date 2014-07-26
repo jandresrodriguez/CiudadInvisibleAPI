@@ -10,4 +10,8 @@ class Asset < ActiveRecord::Base
   validates_attachment_content_type :file, :content_type => /\Aimage\/.*\Z/
 
 
+  def file_url
+    file.path
+  end
+
 end

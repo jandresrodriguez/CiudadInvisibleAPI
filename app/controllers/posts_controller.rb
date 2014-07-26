@@ -12,6 +12,11 @@ class PostsController < ApplicationController
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @post = Post.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }})}
+    end
   end
 
   # GET /posts/new
@@ -38,7 +43,7 @@ class PostsController < ApplicationController
             @post.assets.create(file: photo)
           }
         else
-          # Si no recibe en el assets_atributes controlo si bien en base64
+          # Si no recibe en el assets_atributes controlo si viene en base64
           if params[:assets_images]
             params[:assets_images].each { |image|
               # Crea la imagen a partir del data
@@ -95,5 +100,4 @@ class PostsController < ApplicationController
       params.require(:post).permit(:title, :author, :description, :image, :date, :location, :category, assets_attributes: [:id, :post_id, :file])#, assets_images: [:data, :filename, :content_type]) 
       #params.require(:post).permit!
     end
-
 end

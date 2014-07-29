@@ -36,4 +36,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Direccion local para las imagenes
+  config.action_controller.asset_host = 'http://localhost:3000' # Locally
 end

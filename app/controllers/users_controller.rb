@@ -39,22 +39,32 @@ class UsersController < ApplicationController
 
     # POST /login_facebook
   def create_facebook
-    @user = User.new(user_params)
-    user.login_type = "facebook"
-    if params[:avatar64]
-      data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = params[:avatar64][:filename]
-      data.content_type = params[:avatar64][:content_type] 
-      @user.avatar = data
-    end
+
     respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+      # Controla si existe el usuario, si existe retorna ok, sino lo crea
+      auxUser = User.where(email: user_params[:email]).first
+      if auxUser
+        #format.html { redirect_to auxUser, notice: 'User in.' }
         format.json { head :ok }
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        @user = User.new(user_params)
+        user.login_type = "facebook"
+        if params[:avatar64]
+          data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
+          data.class.class_eval { attr_accessor :original_filename, :content_type }
+          data.original_filename = params[:avatar64][:filename]
+          data.content_type = params[:avatar64][:content_type] 
+          @user.avatar = data
+        end
+
+        if @user.save
+          #format.html { redirect_to @user, notice: 'User was successfully created.' }
+          format.json { head :ok }
+        else
+          #format.html { render :new }
+          format.json { render json: @user.errors, status: :unprocessable_entity }
+        end
+        
       end
     end
   end
@@ -104,13 +114,15 @@ class UsersController < ApplicationController
   end
 
   def login_common
-    if params[:username] && params[:password]
-      user = User.where(username: params[:username], password: params[:password]).first
-      if user
-        head :ok
+    respond_to do |format|
+      if params[:username] && params[:password]
+        user = User.where(username: params[:username], password: params[:password]).first
+        if user
+          format.json { head :ok }
+        end
       end
+      format.json { render json: "usuario o contrasena incorrecta", status: :unprocessable_entity }
     end
-    render json: "usuario o contrasena incorrecta", status: :unprocessable_entity
   end
 
   # PATCH/PUT /users/1

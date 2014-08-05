@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :users
+
   resources :posts do
     resources :assets
   end
@@ -8,6 +10,10 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'posts#index'
+
+  post '/login_facebook' => 'users#create_facebook' 
+  post '/login_twitter' => 'users#create_twitter' 
+  post '/login_common' => 'users#create_common' 
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -4,8 +4,6 @@ class Asset < ActiveRecord::Base
   has_attached_file :file, :styles => { 
   	:medium => "300x300>", 
   	:thumb => "100x100>",
-  	:path => ":rails_root/public/images/:id/:filename",
-    :url  => "/images/:id/:filename"
   	}
   validates_attachment_content_type :file, :content_type => /\Aimage\/.*\Z/
 
@@ -16,3 +14,6 @@ class Asset < ActiveRecord::Base
   end
 
 end
+
+    #:path => ":rails_root/public/images/:id/:filename",
+    #:url  => "/images/:id/:filename"

@@ -5,14 +5,14 @@ Rails.application.configure do
   config.cache_classes = true
 
   # config/environments/production.rb
-  config.paperclip_defaults = {
-    :storage => :s3,
-    :s3_credentials => {
-      :bucket => ENV['ciudadinvisible'],
+  Paperclip::Attachment.default_options[:storage] = :s3
+  Paperclip::Attachment.default_options[:s3_protocol] = 'http'
+  Paperclip::Attachment.default_options[:s3_credentials] =
+    { :bucket => ENV['ciudadinvisible'],
       :access_key_id => ENV['AKIAJG7TMYWMOQZBBXXQ'],
-      :secret_access_key => ENV['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']
-    }
-  }
+      :secret_access_key => ENV['Kpd6OathLsnX7G4WRVTpP/Ab7cizgZ3qNFbx1/G4'] }
+  Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
+  Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers

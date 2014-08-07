@@ -45,7 +45,8 @@ class UsersController < ApplicationController
       auxUser = User.where(email: user_params[:email]).first
       if auxUser
         #format.html { redirect_to auxUser, notice: 'User in.' }
-        format.json { head :ok }
+        # Retorna el usuario
+        format.json {  render json: auxUser }
       else
         @user = User.new(user_params)
         user.login_type = "facebook"
@@ -59,7 +60,8 @@ class UsersController < ApplicationController
 
         if @user.save
           #format.html { redirect_to @user, notice: 'User was successfully created.' }
-          format.json { head :ok }
+          # Retorna el usuario
+          format.json {  render json: @user }
         else
           #format.html { render :new }
           format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -118,7 +120,8 @@ class UsersController < ApplicationController
       if params[:username] && params[:password]
         user = User.where(username: params[:username], password: params[:password]).first
         if user
-          format.json { head :ok }
+          # Si el login es correcto retorna el usuario
+          format.json { render json: user}
         end
       end
       format.json { render json: "usuario o contrasena incorrecta", status: :unprocessable_entity }

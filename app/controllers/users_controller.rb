@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     if @user
       render :json => @user.to_json(:methods => :file_url )
     else
-      render json: "No existe el usuario", status: :unprocessable_entity }
+      render json: "No existe el usuario", status: :unprocessable_entity
     end
   end
 

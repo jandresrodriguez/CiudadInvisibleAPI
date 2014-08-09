@@ -14,6 +14,3 @@ class Asset < ActiveRecord::Base
   end
 
 end
-
-    #:path => ":rails_root/public/images/:id/:filename",
-    #:url  => "/images/:id/:filename"

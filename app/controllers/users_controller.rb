@@ -11,6 +11,12 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @user = User.find(params[:id])
+    if @user
+      render :json => @user.to_json(:methods => :file_url )
+    else
+      render json: "No existe el usuario", status: :unprocessable_entity }
+    end
   end
 
   # GET /users/new
@@ -39,64 +45,49 @@ class UsersController < ApplicationController
 
     # POST /login_facebook
   def create_facebook
-
-    respond_to do |format|
-      # Controla si existe el usuario, si existe retorna ok, sino lo crea
-      auxUser = User.where(email: user_params[:email]).first
-      if auxUser
-        #format.html { redirect_to auxUser, notice: 'User in.' }
-        # Retorna el usuario
-        format.json {  render json: auxUser }
+    # Controla si existe el usuario, si existe retorna ok, sino lo crea
+    @user = User.where(email: user_params[:email]).first
+    if @user
+      # Retorna el usuario
+      render json: @user
+    else
+      @user = User.new(user_params)
+      @user.login_type = "facebook"
+      unless params[:avatar].empty?
+        @user.avatar.url = params[:avatar]
+      end
+      if @user.save
+        render json: @user
       else
-        @user = User.new(user_params)
-        user.login_type = "facebook"
-        if params[:avatar64]
-          data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
-          data.class.class_eval { attr_accessor :original_filename, :content_type }
-          data.original_filename = params[:avatar64][:filename]
-          data.content_type = params[:avatar64][:content_type] 
-          @user.avatar = data
-        end
-
-        if @user.save
-          #format.html { redirect_to @user, notice: 'User was successfully created.' }
-          # Retorna el usuario
-          format.json {  render json: @user }
-        else
-          #format.html { render :new }
-          format.json { render json: @user.errors, status: :unprocessable_entity }
-        end
-        
+        render json: @user.errors, status: :unprocessable_entity
       end
     end
   end
 
     # POST /login_twitter
   def create_twitter
-    @user = User.new(user_params)
-    user.login_type = "twitter"
-    if params[:avatar64]
-      data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
-      data.class.class_eval { attr_accessor :original_filename, :content_type }
-      data.original_filename = params[:avatar64][:filename]
-      data.content_type = params[:avatar64][:content_type] 
-      @user.avatar = data
-    end
-    respond_to do |format|
+    @user = User.where(email: user_params[:email]).first
+    if @user
+      # Retorna el usuario
+      render json: @user
+    else
+      @user = User.new(user_params)
+      @user.login_type = "twitter"
+      unless params[:avatar].empty?
+        @user.avatar.url = params[:avatar]
+      end
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { head :ok}
+        render json: @user
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        render json: @user.errors, status: :unprocessable_entity
       end
     end
   end
 
-    # POST /login_common
+    # POST /register_common
   def create_common
     @user = User.new(user_params)
-    user.login_type = "common"
+    @user.login_type = "common"
     if params[:avatar64]
       data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
       data.class.class_eval { attr_accessor :original_filename, :content_type }
@@ -104,30 +95,25 @@ class UsersController < ApplicationController
       data.content_type = params[:avatar64][:content_type] 
       @user.avatar = data
     end
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { head :ok }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
+    if @user.save
+      render json: @user
+    else
+      render json: @user.errors, status: :unprocessable_entity 
+    end 
   end
 
+  # POST /login_common
   def login_common
-    if params[:username] && params[:password]
-      user = User.where(username: params[:username], password: params[:password]).first
-      if user
-        # Si el login es correcto retorna el usuario
-        render json: user
+    if params[:email] && params[:password]
+      @user = User.where(email: params[:email], password: params[:password]).first
+      if @user
+        render json: @user
       else
         render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
       end
     else
       render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
     end
-    
   end
 
   # PATCH/PUT /users/1

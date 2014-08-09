@@ -116,16 +116,18 @@ class UsersController < ApplicationController
   end
 
   def login_common
-    respond_to do |format|
-      if params[:username] && params[:password]
-        user = User.where(username: params[:username], password: params[:password]).first
-        if user
-          # Si el login es correcto retorna el usuario
-          format.json { render json: user}
-        end
+    if params[:username] && params[:password]
+      user = User.where(username: params[:username], password: params[:password]).first
+      if user
+        # Si el login es correcto retorna el usuario
+        render json: user
+      else
+        render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
       end
-      format.json { render json: "usuario o contrasena incorrecta", status: :unprocessable_entity }
+    else
+      render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
     end
+    
   end
 
   # PATCH/PUT /users/1

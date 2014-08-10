@@ -13,7 +13,11 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     if @user
-      render :json => @user.to_json(:methods => :file_url )
+      if @user.login_type == "facebook" || @user.login_type == "twitter"
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ])
+      else
+        render :json => @users.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], :methods => :file_url)
+      end
     else
       render json: "No existe el usuario", status: :unprocessable_entity
     end
@@ -54,7 +58,7 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       @user.login_type = "facebook"
       if params[:avatar]
-        @user.avatar.url = params[:avatar]
+        @user.url_avatar = params[:avatar]
       end
       if @user.save
         render json: @user
@@ -74,7 +78,7 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       @user.login_type = "twitter"
       if params[:avatar]
-        @user.avatar.url = params[:avatar]
+        @user.url_avatar = params[:avatar]
       end
       if @user.save
         render json: @user

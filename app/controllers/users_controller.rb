@@ -53,7 +53,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.login_type = "facebook"
-      unless params[:avatar].empty?
+      unless params[:avatar]
         @user.avatar.url = params[:avatar]
       end
       if @user.save
@@ -73,7 +73,7 @@ class UsersController < ApplicationController
     else
       @user = User.new(user_params)
       @user.login_type = "twitter"
-      unless params[:avatar].empty?
+      unless params[:avatar]
         @user.avatar.url = params[:avatar]
       end
       if @user.save

@@ -10,8 +10,8 @@ Rails.application.configure do
   :s3_host_name => 's3-sa-east-1.amazonaws.com',
   :s3_credentials => {
     :bucket => 'ciudadinvisible',
-    :access_key_id => 'AKIAJG7TMYWMOQZBBXXQ',
-    :secret_access_key => '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'}
+    :access_key_id => '',
+    :secret_access_key => ''}
   }
   
   config.cache_classes = false

@@ -5,15 +5,14 @@ Rails.application.configure do
   config.cache_classes = true
 
   # config/environments/production.rb
-  Paperclip::Attachment.default_options[:storage] = :s3
-  Paperclip::Attachment.default_options[:s3_protocol] = 'http'
-  Paperclip::Attachment.default_options[:s3_credentials] =
-    { :bucket => ENV['ciudadinvisible'],
-      :access_key_id => ENV['AKIAJG7TMYWMOQZBBXXQ'],
-      :secret_access_key => ENV['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'] }
-  Paperclip::Attachment.default_options[:url] = ':s3_domain_url'
-  Paperclip::Attachment.default_options[:path] = '/:class/:attachment/:id_partition/:style/:filename'
-
+config.paperclip_defaults = {
+  :storage => :s3,
+  :s3_host_name => 's3-sa-east-1.amazonaws.com',
+  :s3_credentials => {
+    :bucket => ENV['S3_BUCKET_NAME'],
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_ACCESS_KEY']}
+  }
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.

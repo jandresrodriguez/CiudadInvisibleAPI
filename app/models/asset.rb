@@ -9,8 +9,7 @@ class Asset < ActiveRecord::Base
 
 
   def file_url
-    # Concatela la url del host mas la de la imagen
-    ActionController::Base.asset_host + file.url
+    file.url
   end
 
 end

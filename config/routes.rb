@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'posts#index'
 
+  get '/posts_by_user/:user_id' => 'posts#posts_by_user' 
+
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 

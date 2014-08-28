@@ -93,6 +93,21 @@ class PostsController < ApplicationController
     end
   end
 
+  #POST /posts_by_user/:user_id
+  def posts_by_user
+    if params[:user_id]
+      posts = Post.where(user_id: params[:user_id])
+      if posts.empty?
+        render json: "empty", status: :unprocessable_entity
+      else
+        render json: posts, status: :ok
+      end
+      
+    else
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post

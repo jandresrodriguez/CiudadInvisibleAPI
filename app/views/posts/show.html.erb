@@ -7,7 +7,7 @@
 
 <p>
   <strong>Author:</strong>
-  <%= @post.author %>
+  <%= @post.user ? @post.user.username : "" %>
 </p>
 
 <p>

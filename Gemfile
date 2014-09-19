@@ -28,6 +28,8 @@ gem 'spring',        group: :development
 
 gem "paperclip", "~> 4.1"
 
+gem "geocoder"
+
 gem 'aws-sdk', group: :production
 
 # Use ActiveModel has_secure_password

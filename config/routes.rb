@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 
+  post '/posts_nearby' => 'posts#posts_nearby' 
 
   post '/register_common' => 'users#create_common' 
 

@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
   protect_from_forgery with: :null_session   
-  skip_before_filter :verify_authenticity_token, :only => [:update]
+  skip_before_filter :verify_authenticity_token, :only => [:update, :posts_nearby]
 
   # GET /posts
   # GET /posts.json
@@ -107,6 +107,26 @@ class PostsController < ApplicationController
       render json: "error", status: :unprocessable_entity
     end
   end
+
+   #POST /posts_nearby
+  def posts_nearby
+    begin
+      if params[:distance] && params[:latitude] && params[:longitude]
+        posts = Post.near([params[:latitude].to_f, params[:longitude].to_f], params[:distance].to_i, :units => :km)
+        if posts.empty?
+          render json: "empty", status: :unprocessable_entity
+        else
+          render json: posts, status: :ok
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
+  #Venue.
 
   private
     # Use callbacks to share common setup or constraints between actions.

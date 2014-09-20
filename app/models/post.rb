@@ -4,7 +4,8 @@ class Post < ActiveRecord::Base
   has_many :assets,  :dependent => :destroy
   accepts_nested_attributes_for :assets, allow_destroy: true
 
-  reverse_geocoded_by :latitude, :longitude
+  reverse_geocoded_by :latitude, :longitude,
+  	:address => :location
   after_validation :reverse_geocode
   
 end

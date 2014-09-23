@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   root 'posts#index'
 
   get '/posts_by_user/:user_id' => 'posts#posts_by_user' 
+  get '/n_posts/:n' => 'posts#n_posts'
 
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 

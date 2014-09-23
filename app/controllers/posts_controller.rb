@@ -126,6 +126,25 @@ class PostsController < ApplicationController
     end
   end
 
+  #GET /n_posts/:n
+  def n_posts
+    begin
+      if params[:n]
+        n = params[:n].to_i
+        posts = Post.order("posts.created_at DESC").page(n).per(10)
+        if posts.empty?
+          render json: "empty", status: :unprocessable_entity
+        else
+          render json: posts, status: :ok
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   #Venue.
 
   private

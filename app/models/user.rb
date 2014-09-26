@@ -3,10 +3,8 @@ class User < ActiveRecord::Base
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :followed_users, through: :relationships, source: :followed
 
-  has_many :reverse_relationships, foreign_key: "followed_id",
-                                   class_name:  "Relationship",
-                                   dependent:   :destroy
-  has_many :followers, through: :reverse_relationships, source: :follower
+  has_many :reverse_relationships, foreign_key: "followed_id", class_name:  "Relationship", dependent: :destroy
+  has_many :followers, through: :reverse_relationships
 
 	
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
@@ -20,6 +18,18 @@ class User < ActiveRecord::Base
 	def file_url
     # Concatela la url del host mas la de la imagen
     ActionController::Base.asset_host + avatar.url
+  end
+
+  def following?(other_user)
+    relationships.find_by(followed_id: other_user.id)
+  end
+
+  def follow!(other_user)
+    relationships.create!(followed_id: other_user.id)
+  end
+
+  def unfollow!(other_user)
+    relationships.find_by(followed_id: other_user.id).destroy
   end
 
 end

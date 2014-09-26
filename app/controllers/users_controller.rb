@@ -120,6 +120,26 @@ class UsersController < ApplicationController
     end
   end
 
+  #POST /follow_user
+  def follow_user
+    begin
+      if params[:follower] && params[:followed]
+        follower = User.find(params[:follower].to_i)
+        followed = User.find(params[:followed].to_i)
+        if follower.nil? || followed.nil?
+          render json: "empty", status: :unprocessable_entity
+        else
+          follower.follow!(followed)
+          render json: posts, status: :ok
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update

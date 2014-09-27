@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     unless ActionController::Base.asset_host.nil?
       ActionController::Base.asset_host + avatar.url
     else
-      "http://ciudadinvisible.herokuapp.com/" + avatar.url 
+      "http://ciudadinvisible.herokuapp.com" + avatar.url 
     end
   end
 

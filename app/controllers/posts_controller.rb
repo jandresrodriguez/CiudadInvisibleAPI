@@ -48,6 +48,9 @@ class PostsController < ApplicationController
           }
         else
           # Si no recibe en el assets_atributes controlo si viene en base64
+          # Thread.new do
+          #   puts "I'm in a thread!"
+          # end
           if params[:assets_images]
             params[:assets_images].each { |image|
               # Crea la imagen a partir del data

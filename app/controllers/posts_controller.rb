@@ -98,7 +98,7 @@ class PostsController < ApplicationController
     if params[:user_id]
       posts = Post.where(user_id: params[:user_id])
       if posts.empty?
-        render json: "empty", status: :unprocessable_entity
+        render json: "no posts", status: :unprocessable_entity
       else
         render json: posts, status: :ok
       end

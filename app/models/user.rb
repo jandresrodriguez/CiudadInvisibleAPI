@@ -18,8 +18,12 @@ class User < ActiveRecord::Base
 	validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, on: :create }
 
 	def file_url
-    # Concatela la url del host mas la de la imagen
-    ActionController::Base.asset_host + avatar.url
+    # Concatena la url del host mas la de la imagen
+    unless avatar.nil?
+      ActionController::Base.asset_host + avatar.url
+    else
+      ""
+    end
   end
 
   def following?(other_user)

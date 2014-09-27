@@ -19,10 +19,10 @@ class User < ActiveRecord::Base
 
 	def file_url
     # Concatena la url del host mas la de la imagen
-    unless avatar.nil?
+    unless ActionController::Base.asset_host.nil?
       ActionController::Base.asset_host + avatar.url
     else
-      ""
+      "http://ciudadinvisible.herokuapp.com/" + avatar.url 
     end
   end
 

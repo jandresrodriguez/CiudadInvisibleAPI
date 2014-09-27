@@ -16,7 +16,7 @@ class UsersController < ApplicationController
       if @user.login_type == "facebook" || @user.login_type == "twitter"
         render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ])
       else
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], :methods => :file_url)
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { followers: { only: [:id,:username,:first_name,:last_name]} , followed_users: { only: [:id,:username,:first_name,:last_name]} } ,:methods => :file_url)
       end
     else
       render json: "No existe el usuario", status: :unprocessable_entity

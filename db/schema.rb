@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924014355) do
+ActiveRecord::Schema.define(version: 20140927150248) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -24,6 +24,13 @@ ActiveRecord::Schema.define(version: 20140924014355) do
   end
 
   add_index "assets", ["post_id"], name: "index_assets_on_post_id"
+
+  create_table "favorites", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "posts", force: true do |t|
     t.string   "title"

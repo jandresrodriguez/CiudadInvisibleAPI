@@ -145,7 +145,27 @@ class PostsController < ApplicationController
     end
   end
 
-  #Venue.
+  #POST /favorite
+  def favorite
+    begin
+      if params[:user_id] && params[:post_id]
+        user = User.find(params[:user_id].to_i)
+        post = Post.find(params[:post_id].to_i)
+        favorite = Favorite.where(user_id: params[:user_id].to_i, post_id: params[:post_id].to_i)
+        if user && post && favorite.nil?
+          favorite = Favorite.new({user_id: user.id, post_id: post.id})
+          favorite.save!
+          render json: "favorite successfully added", status: :ok
+        else
+          render json: "user/post not exist / favorite already exist", status: :unprocessable_entity
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

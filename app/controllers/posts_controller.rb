@@ -38,37 +38,42 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(post_params)
+    begin
+      @post = Post.new(post_params)
 
-    respond_to do |format|
-      if @post.save
-        if params[:assets_attributes]
-          params[:assets_attributes].each { |key, photo|
-            @post.assets.create(file: photo)
-          }
-        else
-          # Si no recibe en el assets_atributes controlo si viene en base64
-          # Thread.new do
-          #   puts "I'm in a thread!"
-          # end
-          if params[:assets_images]
-            params[:assets_images].each { |image|
-              # Crea la imagen a partir del data
-              data = StringIO.new(Base64.decode64(image[:data]))
-              data.class.class_eval { attr_accessor :original_filename, :content_type }
-              data.original_filename = image[:filename]
-              data.content_type = image[:content_type]
-              
-              @post.assets.create(file: data)
+      respond_to do |format|
+        if @post.save
+          if params[:assets_attributes]
+            params[:assets_attributes].each { |key, photo|
+              @post.assets.create(file: photo)
             }
+          else
+            # Si no recibe en el assets_atributes controlo si viene en base64
+            # Thread.new do
+            #   puts "I'm in a thread!"
+            # end
+            if params[:assets_images]
+              params[:assets_images].each { |image|
+                # Crea la imagen a partir del data
+                data = StringIO.new(Base64.decode64(image[:data]))
+                data.class.class_eval { attr_accessor :original_filename, :content_type }
+                data.original_filename = image[:filename]
+                data.content_type = image[:content_type]
+                
+                @post.assets.create(file: data)
+              }
+            end
           end
+          format.html { redirect_to @post, notice: 'Post was successfully created.' }
+          format.json { render :show, status: :created, location: @post }
+        else
+          format.html { render @post.errors }
+          format.json { render json: @post.errors, status: :unprocessable_entity }
         end
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render :show, status: :created, location: @post }
-      else
-        format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
       end
+    rescue
+      format.html { render @post.errors }
+      format.json { render json: @post.errors, status: :unprocessable_entity }
     end
   end
 
@@ -155,12 +160,33 @@ class PostsController < ApplicationController
         user = User.find(params[:user_id].to_i)
         post = Post.find(params[:post_id].to_i)
         favorite = Favorite.where(user_id: params[:user_id].to_i, post_id: params[:post_id].to_i)
-        if user && post && favorite.nil?
+        if user && post && favorite.empty?
           favorite = Favorite.new({user_id: user.id, post_id: post.id})
           favorite.save!
           render json: "favorite successfully added", status: :ok
         else
           render json: "user/post not exist / favorite already exist", status: :unprocessable_entity
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
+  #POST /favorite
+  def undo_favorite
+    begin
+      if params[:user_id] && params[:post_id]
+        user = User.find(params[:user_id].to_i)
+        post = Post.find(params[:post_id].to_i)
+        favorite = Favorite.where(user_id: params[:user_id].to_i, post_id: params[:post_id].to_i)
+        if user && post && !favorite.empty?
+          favorite.destroy!
+          render json: "favorite successfully deleted", status: :ok
+        else
+          render json: "user/post not exist / favorite not exist", status: :unprocessable_entity
         end
       else
         render json: "error", status: :unprocessable_entity

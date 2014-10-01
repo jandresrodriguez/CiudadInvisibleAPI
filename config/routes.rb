@@ -18,7 +18,10 @@ Rails.application.routes.draw do
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 
   post '/posts_nearby' => 'posts#posts_nearby' 
-  post 'favorite' => "posts#favorite"
+  post '/favorite' => "posts#favorite"
+  delete '/favorite' => "posts#undo_favorite"
+  post '/follow_user' => "users#follow_user"
+  delete '/follow_user' => "users#unfollow_user"
 
   post '/register_common' => 'users#create_common' 
 

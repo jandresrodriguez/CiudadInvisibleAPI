@@ -40,7 +40,6 @@ class PostsController < ApplicationController
   def create
     begin
       @post = Post.new(post_params)
-
       respond_to do |format|
         if @post.save
           if params[:assets_attributes]
@@ -61,11 +60,12 @@ class PostsController < ApplicationController
                 data.content_type = image[:content_type]
                 
                 @post.assets.create(file: data)
+
               }
             end
           end
           format.html { redirect_to @post, notice: 'Post was successfully created.' }
-          format.json { render :show, status: :created, location: @post }
+          format.json { render json: "post added successfully", status: :ok }
         else
           format.html { render @post.errors }
           format.json { render json: @post.errors, status: :unprocessable_entity }
@@ -80,24 +80,35 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1
   # PATCH/PUT /posts/1.json
   def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
-      else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+    begin
+      @post.update(post_params)
+      if params[:assets_images]
+        params[:assets_images].each { |image|
+          # Crea la imagen a partir del data
+          data = StringIO.new(Base64.decode64(image[:data]))
+          data.class.class_eval { attr_accessor :original_filename, :content_type }
+          data.original_filename = image[:filename]
+          data.content_type = image[:content_type]
+          @post.assets.create(file: data)
+        }
       end
+      render json: "Post was successfully updated.", status: :ok
+    rescue
+      render json: "error", status: :unprocessable_entity
     end
   end
 
   # DELETE /posts/1
   # DELETE /posts/1.json
   def destroy
+    begin
     @post.destroy
     respond_to do |format|
       format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
-      format.json { head :no_content }
+      render json: "Post was successfully destroyed.", status: :unprocessable_entity
+    end
+    rescue
+      render json: "error", status: :unprocessable_entity
     end
   end
 

@@ -175,7 +175,7 @@ class PostsController < ApplicationController
     end
   end
 
-  #POST /favorite
+  #DELETE /favorite
   def undo_favorite
     begin
       if params[:user_id] && params[:post_id]
@@ -183,13 +183,13 @@ class PostsController < ApplicationController
         post = Post.find(params[:post_id].to_i)
         favorite = Favorite.where(user_id: params[:user_id].to_i, post_id: params[:post_id].to_i)
         if user && post && !favorite.empty?
-          favorite.destroy!
+          favorite.first.destroy!
           render json: "favorite successfully deleted", status: :ok
         else
           render json: "user/post not exist / favorite not exist", status: :unprocessable_entity
         end
       else
-        render json: "error", status: :unprocessable_entity
+        render json: "wrong params", status: :unprocessable_entity
       end
     rescue
       render json: "error", status: :unprocessable_entity

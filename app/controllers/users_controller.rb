@@ -141,19 +141,19 @@ class UsersController < ApplicationController
   end
 
   #DELETE /follow_user
-  def follow_user
+  def unfollow_user
     begin
       if params[:follower] && params[:followed]
         follower = User.find(params[:follower].to_i)
         followed = User.find(params[:followed].to_i)
-        if follower.nil? || followed.nil?
-          render json: "empty", status: :unprocessable_entity
+        if follower.nil? || followed.nil? || follower.following?(followed).nil?
+          render json: "they are not followers", status: :unprocessable_entity
         else
           follower.unfollow!(followed)
           render json: "followed deleted with success", status: :ok
         end
       else
-        render json: "error", status: :unprocessable_entity
+        render json: "wrong params", status: :unprocessable_entity
       end
     rescue
       render json: "error", status: :unprocessable_entity

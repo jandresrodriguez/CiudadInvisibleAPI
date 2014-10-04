@@ -46,6 +46,8 @@ class PostsController < ApplicationController
             params[:assets_attributes].each { |key, photo|
               @post.assets.create(file: photo)
             }
+            format.html { redirect_to @post, notice: 'Post was successfully created.' }
+            format.json { render json: "post added successfully", status: :ok }
           else
             # Si no recibe en el assets_atributes controlo si viene en base64
             # Thread.new do
@@ -62,10 +64,11 @@ class PostsController < ApplicationController
                 @post.assets.create(file: data)
 
               }
+              format.html { redirect_to @post, notice: 'Post was successfully created.' }
+              format.json { render json: "post added successfully", status: :ok }
             end
           end
-          format.html { redirect_to @post, notice: 'Post was successfully created.' }
-          format.json { render json: "post added successfully", status: :ok }
+          
         else
           format.html { render @post.errors }
           format.json { render json: @post.errors, status: :unprocessable_entity }

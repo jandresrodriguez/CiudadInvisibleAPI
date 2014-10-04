@@ -50,22 +50,26 @@ class UsersController < ApplicationController
 
     # POST /login_facebook
   def create_facebook
-    # Controla si existe el usuario, si existe retorna ok, sino lo crea
-    @user = User.where(email: user_params[:email]).first
-    if @user
-      # Retorna el usuario
-      render json: @user
-    else
-      @user = User.new(user_params)
-      @user.login_type = "facebook"
-      if params[:avatar]
-        @user.url_avatar = params[:avatar]
-      end
-      if @user.save
+    begin
+      # Controla si existe el usuario, si existe retorna ok, sino lo crea
+      @user = User.where(email: user_params[:email]).first
+      if @user
+        # Retorna el usuario
         render json: @user
       else
-        render json: @user.errors, status: :unprocessable_entity
+        @user = User.new(user_params)
+        @user.login_type = "facebook"
+        if params[:avatar]
+          @user.url_avatar = params[:avatar]
+        end
+        if @user.save
+          render json: @user
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
       end
+    rescue
+
     end
   end
 

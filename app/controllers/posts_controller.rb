@@ -54,7 +54,7 @@ class PostsController < ApplicationController
             if params[:assets_images]
               params[:assets_images].each { |image|
                 # Crea la imagen a partir del data
-                unless data
+                unless image[:data].nil?
                   data = StringIO.new(Base64.decode64(image[:data]))
                   data.class.class_eval { attr_accessor :original_filename, :content_type }
                   data.original_filename = image[:filename]

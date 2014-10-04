@@ -161,6 +161,26 @@ class UsersController < ApplicationController
     end
   end
 
+  #GET /favorites/:id
+  def favorites
+    begin
+      if params[:id]
+        puts params[:id]
+        user = User.find(params[:id].to_i)
+        posts = user.favorites_posts
+        if posts.empty?
+          render json: "empty", status: :unprocessable_entity
+        else
+          render json: posts, status: :ok
+        end
+      else
+        render json: "error", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update

@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   protect_from_forgery with: :null_session   
-  skip_before_filter :verify_authenticity_token, :only => [:login_common]
+  skip_before_filter :verify_authenticity_token
 
   # GET /users
   # GET /users.json

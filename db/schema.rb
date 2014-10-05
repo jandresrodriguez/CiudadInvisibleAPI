@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140927150935) do
+ActiveRecord::Schema.define(version: 20141005020114) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140927150935) do
     t.datetime "avatar_updated_at"
     t.string   "login_type"
     t.string   "url_avatar"
+    t.string   "bio"
   end
 
 end

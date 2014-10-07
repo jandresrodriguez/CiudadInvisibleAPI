@@ -40,40 +40,13 @@ class PostsController < ApplicationController
   def create
     begin
       @post = Post.new(post_params)
-      respond_to do |format|
-        if @post.save
-          if params[:assets_attributes]
-            params[:assets_attributes].each { |key, photo|
-              @post.assets.create(file: photo)
-            }
-          else
-            # Si no recibe en el assets_atributes controlo si viene en base64
-            # Thread.new do
-            #   puts "I'm in a thread!"
-            # end
-            if params[:assets_images]
-              params[:assets_images].each { |image|
-                # Crea la imagen a partir del data
-                data = StringIO.new(Base64.decode64(image[:data]))
-                data.class.class_eval { attr_accessor :original_filename, :content_type }
-                data.original_filename = image[:filename]
-                data.content_type = image[:content_type]
-                
-                @post.assets.create(file: data)
-
-              }
-            end
-          end
-          format.html { redirect_to @post, notice: 'Post was successfully created.' }
-          format.json { render json: "post added successfully", status: :ok }
-        else
-          format.html { render @post.errors }
-          format.json { render json: @post.errors, status: :unprocessable_entity }
-        end
+      if @post.save
+        render json: @post
+      else
+        render json: @post.errors, status: :unprocessable_entity 
       end
     rescue
-      format.html { render @post.errors }
-      format.json { render json: @post.errors, status: :unprocessable_entity }
+      render json: @post.errors, status: :unprocessable_entity 
     end
   end
 
@@ -207,21 +180,7 @@ class PostsController < ApplicationController
     end
   end
 
-  # POST /post_without_assets
-  def create_without_assets
-    begin
-      @post = Post.new(post_params)
-      if @post.save
-        render json: @post
-      else
-        render json: @post.errors, status: :unprocessable_entity 
-      end
-    rescue
-      render json: @post.errors, status: :unprocessable_entity 
-    end
-  end
-
-  # POST /post_assign_assets/:id
+  # POST /post_assets/:id
   def assign_assets
     begin
       @post = Post.find(params[:id].to_i)

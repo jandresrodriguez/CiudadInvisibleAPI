@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   delete '/favorite' => "posts#undo_favorite"
   post '/follow_user' => "users#follow_user"
   delete '/follow_user' => "users#unfollow_user"
+  get '/favorites/:id' => 'users#favorites'
 
   post '/register_common' => 'users#create_common' 
 

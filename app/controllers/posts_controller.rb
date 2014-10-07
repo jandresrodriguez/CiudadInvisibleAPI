@@ -207,6 +207,62 @@ class PostsController < ApplicationController
     end
   end
 
+  # POST /post_without_assets
+  def create_without_assets
+    begin
+      @post = Post.new(post_params)
+      respond_to do |format|
+        if @post.save
+          format.html { redirect_to @post, notice: 'Post was successfully created.' }
+          format.json { render json: "post added successfully", status: :ok }
+        else
+          format.html { render @post.errors }
+          format.json { render json: @post.errors, status: :unprocessable_entity }
+        end
+      end
+    rescue
+      format.html { render @post.errors }
+      format.json { render json: @post.errors, status: :unprocessable_entity }
+    end
+  end
+
+  # POST /posts :id
+  def assign_assets
+    begin
+      @post = Post.find(params[:id].to_i)
+      
+      # Asigna los assets
+      if params[:assets_attributes]
+        params[:assets_attributes].each { |key, photo|
+          @post.assets.create(file: photo)
+        }
+      else
+        # Si no recibe en el assets_atributes controlo si viene en base64
+        # Thread.new do
+        #   puts "I'm in a thread!"
+        # end
+        if params[:assets_images]
+          params[:assets_images].each { |image|
+            # Crea la imagen a partir del data
+            data = StringIO.new(Base64.decode64(image[:data]))
+            data.class.class_eval { attr_accessor :original_filename, :content_type }
+            data.original_filename = image[:filename]
+            data.content_type = image[:content_type]
+            
+            @post.assets.create(file: data)
+
+          }
+        end
+      end
+      format.html { redirect_to @post, notice: 'Post was successfully created.' }
+      format.json { render json: "post added successfully", status: :ok }
+
+    rescue
+      format.html { render @post.errors }
+      format.json { render json: @post.errors, status: :unprocessable_entity }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post

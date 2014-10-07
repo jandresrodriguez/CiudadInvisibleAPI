@@ -211,22 +211,17 @@ class PostsController < ApplicationController
   def create_without_assets
     begin
       @post = Post.new(post_params)
-      respond_to do |format|
-        if @post.save
-          format.html { redirect_to @post, notice: 'Post was successfully created.' }
-          format.json { render json: "post added successfully", status: :ok }
-        else
-          format.html { render @post.errors }
-          format.json { render json: @post.errors, status: :unprocessable_entity }
-        end
+      if @post.save
+        render json: @post
+      else
+        render json: @post.errors, status: :unprocessable_entity 
       end
     rescue
-      format.html { render @post.errors }
-      format.json { render json: @post.errors, status: :unprocessable_entity }
+      render json: @post.errors, status: :unprocessable_entity 
     end
   end
 
-  # POST /posts :id
+  # POST /post_assign_assets/:id
   def assign_assets
     begin
       @post = Post.find(params[:id].to_i)
@@ -254,12 +249,10 @@ class PostsController < ApplicationController
           }
         end
       end
-      format.html { redirect_to @post, notice: 'Post was successfully created.' }
-      format.json { render json: "post added successfully", status: :ok }
+      render json: "assets assigned successfully", status: :ok 
 
     rescue
-      format.html { render @post.errors }
-      format.json { render json: @post.errors, status: :unprocessable_entity }
+      render json: @post.errors, status: :unprocessable_entity
     end
   end
 

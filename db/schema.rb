@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141008214008) do
+ActiveRecord::Schema.define(version: 20141008213800) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -54,16 +54,6 @@ ActiveRecord::Schema.define(version: 20141008214008) do
     t.float    "latitude"
     t.float    "longitude"
   end
-
-  create_table "posts_categories", force: true do |t|
-    t.integer  "post_id"
-    t.integer  "category_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "posts_categories", ["category_id"], name: "index_posts_categories_on_category_id"
-  add_index "posts_categories", ["post_id"], name: "index_posts_categories_on_post_id"
 
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"

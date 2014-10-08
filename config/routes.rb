@@ -12,13 +12,14 @@ Rails.application.routes.draw do
   root 'posts#index'
 
   get '/posts_by_user/:user_id' => 'posts#posts_by_user' 
+  post '/posts_nearby' => 'posts#posts_nearby' 
+  post '/favorite' => "posts#favorite"
   get '/n_posts/:n' => 'posts#n_posts'
+  post '/post_assets/:id' => 'posts#assign_assets'
 
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 
-  post '/posts_nearby' => 'posts#posts_nearby' 
-  post '/favorite' => "posts#favorite"
   delete '/favorite' => "posts#undo_favorite"
   post '/follow_user' => "users#follow_user"
   delete '/follow_user' => "users#unfollow_user"

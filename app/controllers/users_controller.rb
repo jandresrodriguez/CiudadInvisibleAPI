@@ -15,9 +15,9 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user
       if @user.login_type == "facebook" || @user.login_type == "twitter"
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ], include: { followers: { only: [:id,:username,:first_name,:last_name]} , followed_users: { only: [:id,:username,:first_name,:last_name]}, favorites_posts: { only: [:id, :title]} })
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}} } , methods: [:followers_quantity , :followed_quantity])
       else
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { followers: { only: [:id,:username,:first_name,:last_name]} , followed_users: { only: [:id,:username,:first_name,:last_name]}, favorites_posts: { only: [:id, :title]} } ,:methods => :file_url)
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}  }} , methods: [:followers_quantity , :followed_quantity, :file_url ] )
       end
     else
       render json: "No existe el usuario", status: :unprocessable_entity
@@ -169,16 +169,53 @@ class UsersController < ApplicationController
   def favorites
     begin
       if params[:id]
-        puts params[:id]
         user = User.find(params[:id].to_i)
         posts = user.favorites_posts
         if posts.empty?
-          render json: "empty", status: :unprocessable_entity
+          render json: "no favorites for that user", status: :unprocessable_entity
         else
           render json: posts, status: :ok
         end
       else
-        render json: "error", status: :unprocessable_entity
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
+  #GET /followers/:id
+  def followers
+    begin
+      if params[:id]
+        user = User.find(params[:id].to_i)
+        followers = user.followers
+        if followers.empty?
+          render json: "user not has any follower", status: :unprocessable_entity
+        else
+          render json: followers, status: :ok
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
+  #GET /followed/:id
+  def followed
+    begin
+      if params[:id]
+        user = User.find(params[:id].to_i)
+        followed_users = user.followed_users
+        if followed_users.empty?
+          render json: "user isnt following any user", status: :unprocessable_entity
+        else
+          render json: followed_users, status: :ok
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity
       end
     rescue
       render json: "error", status: :unprocessable_entity

@@ -38,4 +38,12 @@ class User < ActiveRecord::Base
     relationships.find_by(followed_id: other_user.id).destroy
   end
 
+  def followers_quantity
+    followers.count
+  end
+
+  def followed_quantity
+    followed_users.count
+  end
+
 end

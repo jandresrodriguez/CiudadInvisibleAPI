@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 	validates :username, presence: true
 	validates :first_name, presence: true
 	validates :last_name, presence: true
-	validates :email, presence: true, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, on: :create }
+	validates :email, uniqueness: true, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, on: :create }
 
 	def file_url
     # Concatena la url del host mas la de la imagen

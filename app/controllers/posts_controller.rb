@@ -188,37 +188,25 @@ class PostsController < ApplicationController
   end
 
   # POST /post_assets/:id
-  def assign_assets
+  def upload_assets
     begin
-      @post = Post.find(params[:id].to_i)
-      
-      # Asigna los assets
-      if params[:assets_attributes]
-        params[:assets_attributes].each { |key, photo|
-          @post.assets.create(file: photo)
+      post = Post.new()
+      post.save!
+      if params[:assets_images]
+        params[:assets_images].each { |image|
+          # Crea la imagen a partir del data
+          data = StringIO.new(Base64.decode64(image[:data]))
+          data.class.class_eval { attr_accessor :original_filename, :content_type }
+          data.original_filename = image[:filename]
+          data.content_type = image[:content_type]
+          post.assets.create(file: data)
         }
+        render json: post.id , status: :ok 
       else
-        # Si no recibe en el assets_atributes controlo si viene en base64
-        # Thread.new do
-        #   puts "I'm in a thread!"
-        # end
-        if params[:assets_images]
-          params[:assets_images].each { |image|
-            # Crea la imagen a partir del data
-            data = StringIO.new(Base64.decode64(image[:data]))
-            data.class.class_eval { attr_accessor :original_filename, :content_type }
-            data.original_filename = image[:filename]
-            data.content_type = image[:content_type]
-            
-            @post.assets.create(file: data)
-
-          }
-        end
+        render json: "no image attached", status: :unprocessable_entity
       end
-      render json: "assets assigned successfully", status: :ok 
-
     rescue
-      render json: @post.errors, status: :unprocessable_entity
+      render json: "error", status: :unprocessable_entity
     end
   end
 

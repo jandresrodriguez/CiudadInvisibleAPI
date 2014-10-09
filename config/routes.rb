@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   post '/posts_nearby' => 'posts#posts_nearby' 
   post '/favorite' => "posts#favorite"
   get '/n_posts/:n' => 'posts#n_posts'
-  post '/post_assets/:id' => 'posts#assign_assets'
+  post '/post_assets/:id' => 'posts#upload_assets'
 
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 

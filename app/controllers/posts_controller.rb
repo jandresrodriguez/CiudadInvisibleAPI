@@ -190,8 +190,12 @@ class PostsController < ApplicationController
   # POST /post_assets/:id
   def upload_assets
     begin
-      post = Post.new()
-      post.save!
+      if params[:post_id]
+        post = Post.find_by_id(params[:post_id])
+      else
+        post = Post.new()
+        post.save!
+      end
       if params[:assets_images]
         params[:assets_images].each { |image|
           # Crea la imagen a partir del data

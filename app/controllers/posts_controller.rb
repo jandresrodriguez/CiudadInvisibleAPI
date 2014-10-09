@@ -41,7 +41,14 @@ class PostsController < ApplicationController
     begin
       @post = Post.new(post_params)
       if @post.save
-        render json: @post
+        if params[:post][:category]
+          category = Category.where(name: params[:post][:category])
+          unless category.empty?
+            type = PostType.new(post_id: @post.id, category_id: category.id)
+            type.save!
+          end
+        end
+        render json: @post, status: :ok
       else
         render json: @post.errors, status: :unprocessable_entity 
       end

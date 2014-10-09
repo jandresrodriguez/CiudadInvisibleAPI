@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141008215446) do
+ActiveRecord::Schema.define(version: 20141009004753) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 20141008215446) do
 
   add_index "favorites", ["post_id"], name: "index_favorites_on_post_id"
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id"
+
+  create_table "post_types", force: true do |t|
+    t.integer  "post_id"
+    t.integer  "category_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "post_types", ["category_id"], name: "index_post_types_on_category_id"
+  add_index "post_types", ["post_id"], name: "index_post_types_on_post_id"
 
   create_table "posts", force: true do |t|
     t.string   "title"

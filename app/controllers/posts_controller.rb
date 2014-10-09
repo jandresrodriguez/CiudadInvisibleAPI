@@ -194,7 +194,7 @@ class PostsController < ApplicationController
     end
   end
 
-  # POST /post_assets/:id
+  # POST /upload_assets
   def upload_assets
     begin
       if params[:assets_images]

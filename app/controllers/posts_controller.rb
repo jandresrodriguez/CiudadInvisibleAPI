@@ -48,6 +48,13 @@ class PostsController < ApplicationController
             type.save!
           end
         end
+        if params[:post][:images]
+          params[:post][:images].each do |image|
+            asset = Asset.find_by_id(image)
+            @post.assets << asset
+            @post.save!
+          end
+        end
         render json: @post, status: :ok
       else
         render json: @post.errors, status: :unprocessable_entity 
@@ -190,22 +197,14 @@ class PostsController < ApplicationController
   # POST /post_assets/:id
   def upload_assets
     begin
-      if params[:post_id]
-        post = Post.find_by_id(params[:post_id])
-      else
-        post = Post.new()
-        post.save!
-      end
       if params[:assets_images]
-        params[:assets_images].each { |image|
-          # Crea la imagen a partir del data
-          data = StringIO.new(Base64.decode64(image[:data]))
-          data.class.class_eval { attr_accessor :original_filename, :content_type }
-          data.original_filename = image[:filename]
-          data.content_type = image[:content_type]
-          post.assets.create(file: data)
-        }
-        render json: post.id , status: :ok 
+        # Crea la imagen a partir del data
+        data = StringIO.new(Base64.decode64(params[:assets_images][:data]))
+        data.class.class_eval { attr_accessor :original_filename, :content_type }
+        data.original_filename = image[:filename]
+        data.content_type = image[:content_type]
+        asset = Asset.create(file: data)
+        render json: asset.id , status: :ok 
       else
         render json: "no image attached", status: :unprocessable_entity
       end

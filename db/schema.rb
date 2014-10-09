@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009004753) do
+ActiveRecord::Schema.define(version: 20141009014121) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20141009004753) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "text"
+    t.integer  "likes"
   end
 
   add_index "comments", ["post_id"], name: "index_comments_on_post_id"

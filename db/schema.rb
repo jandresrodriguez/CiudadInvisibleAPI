@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009014121) do
+ActiveRecord::Schema.define(version: 20141010214224) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 20141009014121) do
 
   add_index "favorites", ["post_id"], name: "index_favorites_on_post_id"
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id"
+
+  create_table "part_of_tours", force: true do |t|
+    t.integer  "post_id"
+    t.integer  "tour_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "part_of_tours", ["post_id"], name: "index_part_of_tours_on_post_id"
+  add_index "part_of_tours", ["tour_id"], name: "index_part_of_tours_on_tour_id"
 
   create_table "post_types", force: true do |t|
     t.integer  "post_id"
@@ -97,6 +107,16 @@ ActiveRecord::Schema.define(version: 20141009014121) do
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id"
   add_index "relationships", ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
   add_index "relationships", ["follower_id"], name: "index_relationships_on_follower_id"
+
+  create_table "tours", force: true do |t|
+    t.integer  "user_id"
+    t.string   "city"
+    t.integer  "duration"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tours", ["user_id"], name: "index_tours_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "username"

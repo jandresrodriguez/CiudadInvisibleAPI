@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :tours
+
   resources :comments
 
   resources :categories

@@ -197,20 +197,14 @@ class PostsController < ApplicationController
   # POST /upload_assets
   def upload_assets
     begin
-      puts "antes"
-        puts params
-        puts "*****************************"
       if params[:assets_images]
-        puts "entro"
-        puts params
-        puts "*****************************"
         # Crea la imagen a partir del data
         data = StringIO.new(Base64.decode64(params[:assets_images][:data]))
-        puts "******************data***********#{data}"
         data.class.class_eval { attr_accessor :original_filename, :content_type }
-        data.original_filename = image[:filename]
-        data.content_type = image[:content_type]
-        asset = Asset.create(file: data)
+        data.original_filename = params[:assets_images][:filename]
+        data.content_type = params[:assets_images][:content_type]
+        asset = Asset.new(file: data)
+        asset.save!
         render json: asset.id , status: :ok 
       else
         render json: "no image attached", status: :unprocessable_entity

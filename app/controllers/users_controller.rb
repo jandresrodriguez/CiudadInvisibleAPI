@@ -234,7 +234,7 @@ class UsersController < ApplicationController
         @user.avatar = data
       end
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { render json: @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }

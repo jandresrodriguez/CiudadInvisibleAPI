@@ -55,7 +55,7 @@ class UsersController < ApplicationController
       @user = User.where(email: user_params[:email]).first
       if @user
         # Retorna el usuario
-        render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
       else
         @user = User.new(user_params)
         @user.login_type = "facebook"
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
           @user.url_avatar = params[:avatar]
         end
         if @user.save
-          render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
         else
           render json: @user.errors, status: :unprocessable_entity
         end
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
     @user = User.where(email: user_params[:email]).first
     if @user
       # Retorna el usuario
-      render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
     else
       @user = User.new(user_params)
       @user.login_type = "twitter"
@@ -86,7 +86,7 @@ class UsersController < ApplicationController
         @user.url_avatar = params[:avatar]
       end
       if @user.save
-        render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
       else
         render json: @user.errors, status: :unprocessable_entity
       end
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
       @user.avatar = data
     end
     if @user.save
-      render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
     else
       render json: @user.errors, status: :unprocessable_entity 
     end 
@@ -116,7 +116,7 @@ class UsersController < ApplicationController
     if params[:email] && params[:password]
       @user = User.where(email: params[:email], password: params[:password]).first
       if @user
-        render json: @user
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
       else
         render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
       end

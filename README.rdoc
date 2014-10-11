@@ -1,3 +1,3 @@
-== RESTful POST API
+== Ciudad Invisible API, Uruguay
 
-REST API of Posts, which was built in order to test prototypes of CIUDAD INVISIBLE.
+API of Ciudad Invisible Uruguay, which was built in order to unify all the information of CIUDAD INVISIBLE URUGUAY.

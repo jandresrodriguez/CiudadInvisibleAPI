@@ -226,6 +226,13 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
+      if params[:avatar64]
+        data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
+        data.class.class_eval { attr_accessor :original_filename, :content_type }
+        data.original_filename = params[:avatar64][:filename]
+        data.content_type = params[:avatar64][:content_type] 
+        @user.avatar = data
+      end
       if @user.update(user_params)
         format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }

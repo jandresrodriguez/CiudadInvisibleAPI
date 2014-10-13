@@ -205,7 +205,7 @@ class PostsController < ApplicationController
         data.content_type = params[:assets_images][:content_type]
         asset = Asset.new(file: data)
         asset.save!
-        render json: asset.id , status: :ok 
+        render json: asset.to_json(only: :id) , status: :ok 
       else
         render json: "no image attached", status: :unprocessable_entity
       end

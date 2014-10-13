@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   get '/n_posts/:n' => 'posts#n_posts'
   post '/upload_assets' => 'posts#upload_assets'
 
+  get '/popular_posts/:n' => 'posts#popular_posts'
+
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 

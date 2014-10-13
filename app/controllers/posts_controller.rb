@@ -132,6 +132,24 @@ class PostsController < ApplicationController
     end
   end
 
+   #POST /popular_posts/:n
+  def popular_posts
+    begin
+      votes = Favorite.group(:post_id).count
+      if votes.empty?
+        render json: "no hay votos", status: :unprocessable_entity
+      else
+        popular_posts = []
+        params[:n] ? n=params[:n].to_i : n=10
+        votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,votes| popular_posts<<id}
+        render json: popular_posts, status: :ok
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
+
   #GET /n_posts/:n
   def n_posts
     begin

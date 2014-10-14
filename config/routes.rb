@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
   get '/popular_posts/:n' => 'posts#popular_posts'
 
+  get '/followers_posts/:user_id/:n' => 'posts#followers_posts'
+
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 

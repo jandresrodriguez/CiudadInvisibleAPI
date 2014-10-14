@@ -132,7 +132,7 @@ class PostsController < ApplicationController
     end
   end
 
-   #POST /popular_posts/:n
+   #GET /popular_posts/:n
   def popular_posts
     begin
       votes = Favorite.group(:post_id).count
@@ -149,6 +149,31 @@ class PostsController < ApplicationController
     end
   end
 
+   #GET /followers_posts/:user_id/:n
+  def followers_posts
+    begin
+      if params[:user_id]
+        params[:n] ? n=params[:n].to_i : n=10
+        order_followers = []
+        followers = User.find_by_id(params[:id]).followers.pluck(:id)
+        if followers
+          popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
+          votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
+          posts_to_return = []
+          order_followers.each do |author|
+            posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)
+          end
+          render json: posts_to_return, status: :ok
+        else
+          render json: "no followers", status: :unprocessable_entity
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
 
   #GET /n_posts/:n
   def n_posts

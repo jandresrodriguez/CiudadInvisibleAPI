@@ -106,7 +106,7 @@ class PostsController < ApplicationController
       if posts.empty?
         render json: "no posts", status: :unprocessable_entity
       else
-        render json: posts, status: :ok
+        render json: posts.to_json(:methods => :first_image), status: :ok
       end
       
     else

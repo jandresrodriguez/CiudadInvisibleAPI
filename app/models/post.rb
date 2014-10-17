@@ -11,4 +11,11 @@ class Post < ActiveRecord::Base
   	:address => :location
   after_validation :reverse_geocode
   
+
+
+  def first_image
+  	unless assets.nil? || assets.empty?
+  		assets.first.file.url
+  	end
+  end
 end

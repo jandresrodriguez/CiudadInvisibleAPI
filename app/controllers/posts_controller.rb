@@ -42,7 +42,7 @@ class PostsController < ApplicationController
       @post = Post.new(post_params)
       if @post.save
         if params[:post][:category]
-          category = Category.where(name: params[:post][:category])
+          category = Category.where(name: params[:post][:category]).first
           unless category.empty?
             type = PostType.new(post_id: @post.id, category_id: category.id)
             type.save!

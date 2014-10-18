@@ -139,10 +139,14 @@ class PostsController < ApplicationController
       if votes.empty?
         render json: "no hay votos", status: :unprocessable_entity
       else
+        posts_to_return = []
         popular_posts = []
         params[:n] ? n=params[:n].to_i : n=10
         votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,votes| popular_posts<<id}
-        render json: popular_posts, status: :ok
+        popular_posts.each do |post_id|
+          posts_to_return << Post.find_by_id(post_id)
+        end
+        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}), status: :ok
       end
     rescue
       render json: "error", status: :unprocessable_entity

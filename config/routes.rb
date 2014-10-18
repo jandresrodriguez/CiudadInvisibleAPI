@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   post '/register_common' => 'users#create_common' 
 
   #MOBILE
-  post '/posts_mobile' => 'posts#posts_mobile'
+  post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'
   
   # Example of regular route:

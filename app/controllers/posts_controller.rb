@@ -41,11 +41,13 @@ class PostsController < ApplicationController
     begin
       @post = Post.new(post_params)
       if @post.save
-        if params[:post][:category]
-          category = Category.where(name: params[:post][:category]).first
-          unless category.empty?
-            type = PostType.new(post_id: @post.id, category_id: category.id)
-            type.save!
+        unless params[:post][:category].nil? || params[:post][:category].empty?
+          params[:post][:category].each do |category_param|
+            category = Category.where(name: category_param).first
+            unless category.nil?
+              type = PostType.new(post_id: @post.id, category_id: category.id)
+              type.save!
+            end
           end
         end
         if params[:post][:images]
@@ -159,8 +161,8 @@ class PostsController < ApplicationController
       if params[:user_id]
         params[:n] ? n=params[:n].to_i : n=10
         order_followers = []
-        followers = User.find_by_id(params[:id]).followers.pluck(:id)
-        if followers
+        followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
+        unless followers.nil? || followers.empty?
           popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
           votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
           posts_to_return = []

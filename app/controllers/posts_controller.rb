@@ -72,6 +72,15 @@ class PostsController < ApplicationController
     begin
       @post = Post.new(post_params)
       if @post.save
+        unless params[:post][:category].nil? || params[:post][:category].empty?
+          params[:post][:category].each do |category_param|
+            category = Category.where(name: category_param).first
+            unless category.nil?
+              type = PostType.new(post_id: @post.id, category_id: category.id)
+              type.save!
+            end
+          end
+        end
         render json: @post
       else
         render json: @post.errors, status: :unprocessable_entity 
@@ -280,7 +289,7 @@ class PostsController < ApplicationController
   end
 
   # POST /assets_mobile/:id
-  def assign_assets
+  def assets_mobile
     begin
       @post = Post.find(params[:id].to_i)
       # Asigna los assets

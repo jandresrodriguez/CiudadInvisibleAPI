@@ -145,7 +145,7 @@ class PostsController < ApplicationController
   def posts_nearby
     begin
       if params[:distance] && params[:latitude] && params[:longitude]
-        posts = Post.near([params[:latitude].to_f, params[:longitude].to_f], params[:distance].to_i, :units => :km)
+        posts = posts_near(params[:latitude].to_f, params[:longitude].to_f, params[:distance].to_i)
         if posts.empty?
           render json: "empty", status: :unprocessable_entity
         else
@@ -166,13 +166,7 @@ class PostsController < ApplicationController
       if votes.empty?
         render json: "no hay votos", status: :unprocessable_entity
       else
-        posts_to_return = []
-        popular_posts = []
-        params[:n] ? n=params[:n].to_i : n=10
-        votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,votes| popular_posts<<id}
-        popular_posts.each do |post_id|
-          posts_to_return << Post.find_by_id(post_id)
-        end
+        posts_to_return = popular_posts(votes)
         render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}), status: :ok
       end
     rescue
@@ -185,15 +179,9 @@ class PostsController < ApplicationController
     begin
       if params[:user_id]
         params[:n] ? n=params[:n].to_i : n=10
-        order_followers = []
         followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
         unless followers.nil? || followers.empty?
-          popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
-          popular_followers.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
-          posts_to_return = []
-          order_followers.each do |author|
-            posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)
-          end
+          posts_to_return = followers_posts(followers,n)
           render json: posts_to_return.to_json(:methods => :first_image), status: :ok
         else
           render json: "no followers", status: :unprocessable_entity
@@ -211,7 +199,7 @@ class PostsController < ApplicationController
     begin
       if params[:n]
         n = params[:n].to_i
-        posts = Post.order("posts.created_at DESC").page(n).per(10)
+        posts = last_n_posts(n)
         if posts.empty?
           render json: "empty", status: :unprocessable_entity
         else
@@ -298,10 +286,6 @@ class PostsController < ApplicationController
           @post.assets.create(file: photo)
         }
       else
-        # Si no recibe en el assets_atributes controlo si viene en base64
-        # Thread.new do
-        #   puts "I'm in a thread!"
-        # end
         if params[:assets_images]
           params[:assets_images].each { |image|
             # Crea la imagen a partir del data
@@ -322,6 +306,42 @@ class PostsController < ApplicationController
     end
   end
 
+  #POST /preferences_posts
+  def preferences_posts
+    begin
+      if params[:latitude] && params[:longitude] && params[:user_id] && params[:quantity]
+      preferences_posts = []
+      #obtener mas cercanos
+      preferences_posts << posts_near(params[:latitude].to_f,params[:longitude].to_f,5)
+      #obtener mas populares
+      votes = Favorite.group(:post_id).count
+      unless votes.empty?
+        preferences_posts << popular_posts(votes)
+      end
+      #obtener posts de tus seguidores
+      followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
+      unless followers.nil? || followers.empty?
+          preferences_posts << followers_posts(followers,n)
+      end
+      #obtener ultimos
+      preferences_posts << last_n_posts(10)
+      #mezclarlos randomicamente
+      if n > preferences_posts.size
+        preferences_posts.shuffle.take(n)
+      else
+        preferences_posts.shuffle
+      end
+      #devolver
+      if preferences_posts.empty?
+        render json: "no hay posts suficientes", status: :unprocessable_entity
+      else
+        render json: preferences_posts.to_json((:methods => :first_image)), status: :ok
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -332,5 +352,37 @@ class PostsController < ApplicationController
     def post_params
       params.require(:post).permit(:title, :user_id, :description, :images, :date, :location, :category, :latitude, :longitude, assets_attributes: [:id, :post_id, :file])#, assets_images: [:data, :filename, :content_type]) 
       #params.require(:post).permit!
+    end
+
+    def posts_near(latitude,longitude,distance)
+      posts = Post.near([latitude, longitude], distance, :units => :km)
+      posts
+    end
+
+    def popular_posts(votes)
+      posts_to_return = []
+      popular_posts = []
+      params[:n] ? n=params[:n].to_i : n=10
+      votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,votes| popular_posts<<id}
+      popular_posts.each do |post_id|
+        posts_to_return << Post.find_by_id(post_id)
+      end
+      posts_to_return
+    end
+
+    def followers_posts(followers,n)
+      order_followers = []
+      popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
+      popular_followers.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
+      posts_to_return = []
+      order_followers.each do |author|
+        posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)
+      end
+      posts_to_return
+    end
+
+    def last_n_posts(n)
+      posts = Post.order("posts.created_at DESC").page(n).per(10)
+      posts
     end
 end

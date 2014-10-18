@@ -38,6 +38,8 @@ Rails.application.routes.draw do
 
   post '/register_common' => 'users#create_common' 
 
+  post '/preferences_posts' => 'posts#preferences_posts'
+
   #MOBILE
   post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'

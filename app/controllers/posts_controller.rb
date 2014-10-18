@@ -169,7 +169,7 @@ class PostsController < ApplicationController
           order_followers.each do |author|
             posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)
           end
-          render json: posts_to_return, status: :ok
+          render json: posts_to_return.to_json(:methods => :first_image), status: :ok
         else
           render json: "no followers", status: :unprocessable_entity
         end

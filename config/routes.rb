@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   post '/favorite' => "posts#favorite"
   get '/n_posts/:n' => 'posts#n_posts'
   post '/upload_assets' => 'posts#upload_assets'
-
   get '/popular_posts/:n' => 'posts#popular_posts'
 
   get '/followers_posts/:user_id/:n' => 'posts#followers_posts'
@@ -39,6 +38,10 @@ Rails.application.routes.draw do
 
   post '/register_common' => 'users#create_common' 
 
+  #MOBILE
+  post '/posts_mobile' => 'posts#posts_mobile'
+  post '/assets_mobile/:id' => 'posts#assets_mobile'
+  
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

@@ -9,5 +9,11 @@
 Category.create([
 	{name: "Arte"},
 	{name: "Arquitectura"},
-	{name: "Musica"}
+	{name: "Musica"},
+	{name: "Personajes"},
+	{name: "Historia"},
+	{name: "Comida"},
+	{name: "Naturaleza"},
+	{name: "Graffiti"},
+	{name: "Monumentos"}
 	])

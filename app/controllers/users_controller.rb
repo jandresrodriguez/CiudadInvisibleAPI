@@ -174,7 +174,7 @@ class UsersController < ApplicationController
         if posts.empty?
           render json: "no favorites for that user", status: :unprocessable_entity
         else
-          render json: posts, status: :ok
+          render json: posts.to_json(methods: :first_image), status: :ok
         end
       else
         render json: "wrong params", status: :unprocessable_entity

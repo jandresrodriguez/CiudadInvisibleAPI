@@ -338,7 +338,7 @@ class PostsController < ApplicationController
       if preferences_posts.empty?
         render json: "no hay posts suficientes", status: :unprocessable_entity
       else
-        render json: preferences_posts.to_json((:methods => :first_image)), status: :ok
+        render json: preferences_posts.to_json(:methods => :first_image), status: :ok
       end
     rescue
       render json: "error", status: :unprocessable_entity

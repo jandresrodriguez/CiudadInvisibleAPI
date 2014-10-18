@@ -5,6 +5,7 @@ class CategoriesController < ApplicationController
   # GET /categories.json
   def index
     @categories = Category.all
+    render json: @categories.to_json(only: :name), status: :ok
   end
 
   # GET /categories/1
@@ -15,6 +16,7 @@ class CategoriesController < ApplicationController
   # GET /categories/new
   def new
     @category = Category.new
+    render json: @category, status: :ok
   end
 
   # GET /categories/1/edit

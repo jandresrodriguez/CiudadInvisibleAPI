@@ -164,7 +164,7 @@ class PostsController < ApplicationController
         followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
         unless followers.nil? || followers.empty?
           popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
-          votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
+          popular_followers.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
           posts_to_return = []
           order_followers.each do |author|
             posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)

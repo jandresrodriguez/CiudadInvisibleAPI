@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   has_many :favorites
   has_many :favorites_posts, through: :favorites, source: :post
 	
-	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "http://pixrbog.com//imgs/defaultProfile.jpg"
+	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "http://www.99seconds.net/wp-content/uploads/2012/03/no-avatar.jpg"
 	validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
 	validates :username, presence: true

@@ -18,4 +18,12 @@ class Post < ActiveRecord::Base
   		assets.first.file.url
   	end
   end
+
+  def author
+    user.first_name + " " + user.last_name
+  end
+
+  def favorites_quantity
+    Favorite.where(post_id: id).count
+  end
 end

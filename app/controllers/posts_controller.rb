@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     @posts = Post.all
     respond_to do |format|
       format.html
-      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }})}
+      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }} , :methods => [:author, :favorites_quantity])}
     end
   end
 
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }})}
+      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity])}
     end
   end
 

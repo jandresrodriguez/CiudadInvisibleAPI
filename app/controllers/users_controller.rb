@@ -121,7 +121,7 @@ class UsersController < ApplicationController
         render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
       end
     else
-      render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 
+      render json: "wrong params", status: :unprocessable_entity 
     end
   end
 
@@ -138,7 +138,7 @@ class UsersController < ApplicationController
           render json: "followed added with success", status: :ok
         end
       else
-        render json: "error", status: :unprocessable_entity
+        render json: "wrong params", status: :unprocessable_entity
       end
     rescue
       render json: "error", status: :unprocessable_entity
@@ -172,7 +172,7 @@ class UsersController < ApplicationController
         user = User.find(params[:id].to_i)
         posts = user.favorites_posts
         if posts.empty?
-          render json: "no favorites for that user", status: :unprocessable_entity
+          render json: "no favorites for that user", status: :ok
         else
           render json: posts.to_json(methods: :first_image), status: :ok
         end

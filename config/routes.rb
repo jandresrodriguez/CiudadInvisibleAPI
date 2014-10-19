@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :notifications
+
   resources :tours
 
   resources :comments
@@ -37,6 +39,7 @@ Rails.application.routes.draw do
   get '/followed/:id' => 'users#followed'
 
   post '/register_common' => 'users#create_common' 
+  post '/random_tour' => 'posts#random_tour'
 
   post '/preferences_posts' => 'posts#preferences_posts'
 

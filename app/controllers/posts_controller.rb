@@ -345,6 +345,37 @@ class PostsController < ApplicationController
     end
   end
 
+  #POST /random_tour
+  def random_tour
+    begin
+      if params[:latitude] && params[:longitude] && params[:user_id]
+        tour = Tour.new
+        tour.user_id = user_id
+        tour.save!
+        nearby_posts = Post.near([latitude, longitude], 5, :units => :km).first(30)
+        posts_to_see_unordered = nearby_posts.shuffle.take(5)
+        start_point = closest(params[:latitude],params[:longitude],posts_to_see_unordered)
+        posts_to_see_unordered = posts_to_see_unordered.delete(start_point)
+        place_tour = PartOfTOur.create(post_id: start_point.id, tour_id: tour.id, order: 1)
+        tour.posts << place_tour
+        i=2
+        while posts_to_see_unordered.size > 0
+          closest = closest(start_point.latitude,start_point.longitude,posts_to_see_unordered)
+          posts_to_see_unordered = posts_to_see_unordered.delete(closest)
+          place_tour = PartOfTOur.create(post_id: start_point.id, tour_id: tour.id, order: i)
+          tour.posts << place_tour
+          i = i + 1
+          start_point = closest
+        end
+        render json: tour.to_json(include: :posts), status: :ok
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue 
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
@@ -387,5 +418,18 @@ class PostsController < ApplicationController
     def last_n_posts(n)
       posts = Post.order("posts.created_at DESC").page(n).per(10)
       posts
+    end
+
+    def closest(longitude_start,latitude_start, places)
+      min_distance = 100
+      near_place_id = nil
+      places.each do |place|
+        distance = Geocoder::Calculations.distance_between([latitude_start,longitude_start], [place.latitude,place.longitude])
+        if distance < min_distance
+          min_distance = distance
+          near_place_id = place.id
+        end
+      end
+      Post.find_by_id(near_place_id)
     end
 end

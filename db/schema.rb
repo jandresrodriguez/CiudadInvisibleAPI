@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141010214224) do
+ActiveRecord::Schema.define(version: 20141019121340) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20141010214224) do
     t.integer  "tour_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "order"
   end
 
   add_index "part_of_tours", ["post_id"], name: "index_part_of_tours_on_post_id"

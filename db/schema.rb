@@ -95,16 +95,6 @@ ActiveRecord::Schema.define(version: 20141019123228) do
     t.float    "longitude"
   end
 
-  create_table "posts_categories", force: true do |t|
-    t.integer  "post_id"
-    t.integer  "category_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "posts_categories", ["category_id"], name: "index_posts_categories_on_category_id"
-  add_index "posts_categories", ["post_id"], name: "index_posts_categories_on_post_id"
-
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"

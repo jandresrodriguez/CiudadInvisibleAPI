@@ -312,22 +312,22 @@ class PostsController < ApplicationController
       preferences_posts = []
       if params[:latitude] && params[:longitude] 
         #obtener mas cercanos
-        preferences_posts << posts_near(params[:latitude].to_f,params[:longitude].to_f,5)
+        preferences_posts = preferences_posts + posts_near(params[:latitude].to_f,params[:longitude].to_f,5)
       end
       if params[:user_id] 
         #obtener posts de tus seguidores
         followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
         unless followers.nil? || followers.empty?
-            preferences_posts << followers_posts(followers,n)
+            preferences_posts = preferences_posts + followers_posts(followers,n)
         end
       end
       #obtener mas populares
       votes = Favorite.group(:post_id).count
       unless votes.empty?
-        preferences_posts << popular_posts(votes)
+        preferences_posts = preferences_posts + popular_posts(votes)
       end
       #obtener ultimos
-      preferences_posts << last_n_posts(10)
+      preferences_posts = preferences_posts + last_n_posts(10)
       #mezclarlos randomicamente
       if params[:quantity] && params[:quantity] > preferences_posts.size
         preferences_posts.shuffle.take(params[:quantity])

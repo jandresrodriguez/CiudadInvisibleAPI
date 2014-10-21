@@ -191,7 +191,7 @@ class UsersController < ApplicationController
         user = User.find(params[:id].to_i)
         followers = user.followers
         if followers.empty?
-          render json: "user not has any follower", status: :unprocessable_entity
+          render json: "user not has any follower", status: :ok
         else
           render json: followers.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
         end
@@ -210,7 +210,7 @@ class UsersController < ApplicationController
         user = User.find(params[:id].to_i)
         followed_users = user.followed_users
         if followed_users.empty?
-          render json: "user isnt following any user", status: :unprocessable_entity
+          render json: "user isnt following any user", status: :ok
         else
           render json: followed_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
         end

@@ -131,7 +131,7 @@ class PostsController < ApplicationController
     if params[:user_id]
       posts = Post.where(user_id: params[:user_id])
       if posts.empty?
-        render json: "no posts", status: :unprocessable_entity
+        render json: "no posts", status: :ok
       else
         render json: posts.to_json(:methods => :first_image), status: :ok
       end
@@ -147,7 +147,7 @@ class PostsController < ApplicationController
       if params[:distance] && params[:latitude] && params[:longitude]
         posts = posts_near(params[:latitude].to_f, params[:longitude].to_f, params[:distance].to_i)
         if posts.empty?
-          render json: "empty", status: :unprocessable_entity
+          render json: "empty", status: :ok
         else
           render json: posts, status: :ok
         end
@@ -164,7 +164,7 @@ class PostsController < ApplicationController
     begin
       votes = Favorite.group(:post_id).count
       if votes.empty?
-        render json: "no hay votos", status: :unprocessable_entity
+        render json: "no hay votos", status: :ok
       else
         posts_to_return = popular_posts(votes)
         render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}), status: :ok
@@ -184,7 +184,7 @@ class PostsController < ApplicationController
           posts_to_return = followers_posts(followers,n)
           render json: posts_to_return.to_json(:methods => :first_image), status: :ok
         else
-          render json: "no followers", status: :unprocessable_entity
+          render json: "no followers", status: :ok
         end
       else
         render json: "wrong params", status: :unprocessable_entity
@@ -201,7 +201,7 @@ class PostsController < ApplicationController
         n = params[:n].to_i
         posts = last_n_posts(n)
         if posts.empty?
-          render json: "empty", status: :unprocessable_entity
+          render json: "empty", status: :ok
         else
           render json: posts, status: :ok
         end
@@ -336,7 +336,7 @@ class PostsController < ApplicationController
       end
       #devolver
       if preferences_posts.empty?
-        render json: "no hay posts suficientes", status: :unprocessable_entity
+        render json: "no hay posts suficientes", status: :ok
       else
         render json: preferences_posts.to_json(:methods => :first_image), status: :ok
       end

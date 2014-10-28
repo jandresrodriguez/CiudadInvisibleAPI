@@ -159,14 +159,14 @@ class PostsController < ApplicationController
     end
   end
 
-   #GET /popular_posts/:n
+  #GET /popular_posts/:n
   def popular_posts
     begin
       votes = Favorite.group(:post_id).count
       if votes.empty?
         render json: "no hay votos", status: :ok
       else
-        posts_to_return = popular_posts(votes)
+        posts_to_return = get_popular_posts(votes)
         render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}), status: :ok
       end
     rescue
@@ -393,7 +393,7 @@ class PostsController < ApplicationController
       posts
     end
 
-    def popular_posts(votes)
+    def get_popular_posts(votes)
       posts_to_return = []
       popular_posts = []
       params[:n] ? n=params[:n].to_i : n=10

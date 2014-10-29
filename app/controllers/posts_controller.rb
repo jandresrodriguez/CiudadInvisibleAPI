@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     @posts = Post.all
     respond_to do |format|
       format.html
-      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }} , :methods => [:author, :favorites_quantity])}
+      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }} , :methods => [:author, :favorites_quantity, :comments])}
     end
   end
 
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity])}
+      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])}
     end
   end
 
@@ -347,7 +347,7 @@ class PostsController < ApplicationController
 
   #POST /random_tour
   def random_tour
-    #begin
+    begin
       if params[:latitude] && params[:longitude] && params[:user_id]
         tour = Tour.new
         tour.user_id = params[:user_id]
@@ -371,10 +371,26 @@ class PostsController < ApplicationController
       else
         render json: "wrong params", status: :unprocessable_entity
       end
-    #rescue 
-    #  render json: "error", status: :unprocessable_entity
-    #end
+    rescue 
+      render json: "error", status: :unprocessable_entity
+    end
   end
+
+  #POST /comment
+  def comment
+    begin
+      if params[:post_id] && params[:user_id] && params[:comment]
+        comment = Comment.new(post_id: params[:post_id], user_id: params[:user_id], text: params[:comment] )
+        comment.save!
+        render json: "comment created successfully", status: :ok
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue 
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -35,10 +35,12 @@ class Post < ActiveRecord::Base
     comments.each do |comment|
       json = {}
       json[:text] = comment.text
-      json[:first_name] = comment.user.first_name
-      json[:last_name] = comment.user.last_name
-      json[:username] = comment.user.username
-      json[:avatar] = comment.user.file_url
+      if comment.user
+        json[:first_name] = comment.user.first_name
+        json[:last_name] = comment.user.last_name
+        json[:username] = comment.user.username
+        json[:avatar] = comment.user.file_url
+      end
       returnable_array << json
     end
     returnable_array

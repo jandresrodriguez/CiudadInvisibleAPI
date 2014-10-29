@@ -53,8 +53,13 @@ class PostsController < ApplicationController
         if params[:post][:images]
           params[:post][:images].each do |image|
             asset = Asset.find_by_id(image.to_i)
-            @post.assets << asset
-            @post.save!
+            if asset
+              @post.assets << asset
+              @post.save!
+            else
+              render json: "assets with id not found", status: :ok
+              return
+            end
           end
         end
         render json: @post, status: :ok

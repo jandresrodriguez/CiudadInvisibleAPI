@@ -183,7 +183,7 @@ class PostsController < ApplicationController
         params[:n] ? n=params[:n].to_i : n=10
         followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
         unless followers.nil? || followers.empty?
-          posts_to_return = followers_posts(followers,n)
+          posts_to_return = get_followers_posts(followers,n)
           render json: posts_to_return.to_json(:methods => :first_image), status: :ok
         else
           render json: "no followers", status: :ok
@@ -422,7 +422,7 @@ class PostsController < ApplicationController
       posts_to_return
     end
 
-    def followers_posts(followers,n)
+    def get_followers_posts(followers,n)
       order_followers = []
       popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
       popular_followers.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}

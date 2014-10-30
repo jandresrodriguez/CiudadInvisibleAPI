@@ -55,13 +55,10 @@ class PostsController < ApplicationController
             asset = Asset.find_by_id(image.to_i)
             if asset
               @post.assets << asset
-              @post.save!
-            else
-              render json: "assets with id not found", status: :ok
-              return
             end
           end
         end
+        @post.save!
         render json: @post, status: :ok
       else
         render json: @post.errors, status: :unprocessable_entity 

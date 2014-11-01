@@ -445,7 +445,7 @@ class PostsController < ApplicationController
 
     def get_followed_posts(followed,n)
       order_followed = []
-      popular_followed = Relationship.where(follower_id: followed).group(:follower_id).count
+      popular_followed = Relationship.where(followed_id: followed).group(:followed_id).count
       popular_followed.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| order_followed<<id}
       posts_to_return = []
       order_followed.each do |author|

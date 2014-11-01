@@ -222,6 +222,23 @@ class UsersController < ApplicationController
     end
   end
 
+  #GET /top_users/:n
+  def top_users
+    begin
+      if params[:n]
+        popular_users_ids = []
+        followers_quantity = Relationship.group(:followed_id).count
+        followers_quantity.sort_by{ |k,v| v}.reverse.first(params[:n].to_i).each{ |id,followed| popular_users_ids<<id}
+        popular_users = User.where(id: popular_users_ids)
+        render json: popular_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue 
+      render json: "error", status: :unprocessable_entity
+    end
+  end
+
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update

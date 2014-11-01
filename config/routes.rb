@@ -31,7 +31,10 @@ Rails.application.routes.draw do
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 
   post '/login_common' => 'users#login_common' 
+
   delete '/favorite' => "posts#undo_favorite"
+
+  get '/top_users/:n' => "users#top_users"
   post '/follow_user' => "users#follow_user"
   delete '/follow_user' => "users#unfollow_user"
   get '/favorites/:id' => 'users#favorites'

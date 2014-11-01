@@ -439,12 +439,8 @@ class PostsController < ApplicationController
     def get_followed_posts(followed,n)
       order_followed = []
       popular_followed = Relationship.where(followed_id: followed).group(:followed_id).count
-      popular_followed.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| order_followed<<id}
-      posts_to_return = []
-      order_followed.each do |author|
-        posts_to_return.inject(Post.where(user_id: author).order("created_at DESC").limit(5), :<<)
-      end
-      posts_to_return
+      popular_followed.sort_by{ |k,v| v}.reverse.first(10).each{ |id,followed| order_followed<<id}
+      posts_to_return = Post.where(user_id: order_followed).order("created_at DESC").limit(n)
     end
 
     def last_n_posts(n)

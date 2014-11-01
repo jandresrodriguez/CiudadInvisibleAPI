@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   post '/upload_assets' => 'posts#upload_assets'
   get '/popular_posts/:n' => 'posts#popular_posts'
 
-  get '/followers_posts/:user_id/:n' => 'posts#followers_posts'
+  get '/followed_posts/:user_id/:n' => 'posts#followed_posts'
 
   post '/login_facebook' => 'users#create_facebook' 
   post '/login_twitter' => 'users#create_twitter' 

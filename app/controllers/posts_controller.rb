@@ -135,7 +135,7 @@ class PostsController < ApplicationController
       if posts.empty?
         render json: "no posts", status: :ok
       else
-        render json: posts.to_json(:methods => :first_image), status: :ok
+        render json: posts.to_json(:methods => [:first_image, :favorites_quantity]), status: :ok
       end
       
     else
@@ -169,29 +169,36 @@ class PostsController < ApplicationController
         render json: "no hay votos", status: :ok
       else
         posts_to_return = get_popular_posts(votes)
-        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}), status: :ok
+        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => [:file_url, :favorites_quantity] }}), status: :ok
       end
     rescue
       render json: "error", status: :unprocessable_entity
     end
   end
 
-   #GET /followers_posts/:user_id/:n
-  def followers_posts
+   #GET /followed_posts/:user_id/:n
+  def followed_posts
     begin
       if params[:user_id]
         params[:n] ? n=params[:n].to_i : n=10
-        followers = User.find_by_id(params[:user_id]).followers.pluck(:id)
-        unless followers.nil? || followers.empty?
-          posts_to_return = get_followers_posts(followers,n)
-          render json: posts_to_return.to_json(:methods => :first_image), status: :ok
+        puts "1"
+        followed_users = User.find_by_id(params[:user_id]).followed_users.pluck(:id)
+        puts "2"
+        unless followed_users.nil? || followed_users.empty?
+          puts "3"
+          posts_to_return = get_followed_posts(followed_users,n)
+          puts "4"
+          render json: posts_to_return.to_json(:methods => [:first_image, :favorites_quantity]), status: :ok
         else
+          puts "5"
           render json: "no followers", status: :ok
         end
       else
+        puts "6"
         render json: "wrong params", status: :unprocessable_entity
       end
     rescue
+      puts "7"
       render json: "error", status: :unprocessable_entity
     end
   end
@@ -393,6 +400,20 @@ class PostsController < ApplicationController
     end
   end
 
+  #POST /search
+  def search_post
+    begin
+      if params[:search_text]
+
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue 
+      render json: "error", status: :unprocessable_entity
+    end
+    
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -422,13 +443,13 @@ class PostsController < ApplicationController
       posts_to_return
     end
 
-    def get_followers_posts(followers,n)
-      order_followers = []
-      popular_followers = Relationship.where(followed_id: followers).group(:followed_id).count
-      popular_followers.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followers| order_followers<<id}
+    def get_followed_posts(followed,n)
+      order_followed = []
+      popular_followed = Relationship.where(follower_id: followed).group(:follower_id).count
+      popular_followed.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| order_followed<<id}
       posts_to_return = []
-      order_followers.each do |author|
-        posts_to_return << Post.where(user_id: author).order("created_at DESC").limit(5)
+      order_followed.each do |author|
+        posts_to_return + Post.where(user_id: author).order("created_at DESC").limit(5)
       end
       posts_to_return
     end

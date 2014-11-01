@@ -181,24 +181,17 @@ class PostsController < ApplicationController
     begin
       if params[:user_id]
         params[:n] ? n=params[:n].to_i : n=10
-        puts "1"
         followed_users = User.find_by_id(params[:user_id]).followed_users.pluck(:id)
-        puts "2"
         unless followed_users.nil? || followed_users.empty?
-          puts "3"
           posts_to_return = get_followed_posts(followed_users,n)
-          puts "4"
           render json: posts_to_return.to_json(:methods => [:first_image, :favorites_quantity]), status: :ok
         else
-          puts "5"
           render json: "no followers", status: :ok
         end
       else
-        puts "6"
         render json: "wrong params", status: :unprocessable_entity
       end
     rescue
-      puts "7"
       render json: "error", status: :unprocessable_entity
     end
   end
@@ -449,7 +442,7 @@ class PostsController < ApplicationController
       popular_followed.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| order_followed<<id}
       posts_to_return = []
       order_followed.each do |author|
-        posts_to_return + Post.where(user_id: author).order("created_at DESC").limit(5)
+        posts_to_return.inject(Post.where(user_id: author).order("created_at DESC").limit(5), :<<)
       end
       posts_to_return
     end

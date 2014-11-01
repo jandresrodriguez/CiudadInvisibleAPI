@@ -229,8 +229,11 @@ class UsersController < ApplicationController
         popular_users_ids = []
         followers_quantity = Relationship.group(:followed_id).count
         followers_quantity.sort_by{ |k,v| v}.reverse.first(params[:n].to_i).each{ |id,followed| popular_users_ids<<id}
-        popular_users = User.where(id: popular_users_ids)
-        render json: popular_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
+        popular_users = []
+        popular_users_ids.each do |user|
+          popular_users << User.find_by_id(user)
+        end
+        render json: popular_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:file_url,:followers_quantity]), status: :ok
       else
         render json: "wrong params", status: :unprocessable_entity
       end

@@ -169,7 +169,7 @@ class PostsController < ApplicationController
         render json: "no hay votos", status: :ok
       else
         posts_to_return = get_popular_posts(votes)
-        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => :favorites_quantity), status: :ok
+        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:favorites_quantity, :author_avatar]), status: :ok
       end
     rescue
       render json: "error", status: :unprocessable_entity

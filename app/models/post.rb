@@ -25,6 +25,12 @@ class Post < ActiveRecord::Base
     end
   end
 
+  def author_avatar
+    if user
+      user.file_url
+    end
+  end
+
   def favorites_quantity
     Favorite.where(post_id: id).count
   end

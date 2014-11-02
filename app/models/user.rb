@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
     if url_avatar.nil?
       avatar.url 
     else
-      url_avatar
+      url_avatar.partition('?').first
     end
   end
 

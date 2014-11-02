@@ -19,10 +19,10 @@ class User < ActiveRecord::Base
 
 	def file_url
     # Concatena la url del host mas la de la imagen
-    if avatar.nil?
-      url_avatar
-    else
+    if url_avatar.nil?
       avatar.url 
+    else
+      url_avatar
     end
   end
 

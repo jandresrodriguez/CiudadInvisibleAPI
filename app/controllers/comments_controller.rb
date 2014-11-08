@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:show, :edit, :update, :destroy]  
   protect_from_forgery with: :null_session   
-  skip_before_filter :verify_authenticity_token, :only => [:update]
+  skip_before_filter :verify_authenticity_token
 
   # GET /comments
   # GET /comments.json
@@ -26,18 +26,39 @@ class CommentsController < ApplicationController
   def edit
   end
 
-  # POST /comments
-  def create
+  # PUT Comment
+  def comment
     begin
       if params[:post_id] && params[:user_id] && params[:text]
-        comment = Comment.new(comment_params)
-        comment.save!
-        render json: "comment created successfully", status: :ok
+        @comment = Comment.new(comment_params)
+        if @comment.save
+          render json: "comment created successfully", status: :ok
+        else
+          render json: @comment.errors, status: :unprocessable_entity
+        end
       else
         render json: "wrong params", status: :unprocessable_entity
       end
     rescue 
-      render json: "error", status: :unprocessable_entity
+      render "error", status: :unprocessable_entity
+    end
+  end
+
+  # POST /comments
+  def create
+    begin
+      if params[:post_id] && params[:user_id] && params[:text]
+        @comment = Comment.new(comment_params)
+        if @comment.save
+          render json: "comment created successfully", status: :ok
+        else
+          render json: @comment.errors, status: :unprocessable_entity
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue 
+      render json: @comment.errors, status: :unprocessable_entity
     end
   end
 

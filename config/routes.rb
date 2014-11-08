@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   #MOBILE
   post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'
+
+  post 'comment' => 'comments#comment'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,15 +1,20 @@
 class CommentsController < ApplicationController
-  before_action :set_comment, only: [:show, :edit, :update, :destroy]
+  before_action :set_comment, only: [:show, :edit, :update, :destroy]  
+  protect_from_forgery with: :null_session   
+  skip_before_filter :verify_authenticity_token, :only => [:update]
 
   # GET /comments
   # GET /comments.json
   def index
     @comments = Comment.all
+    render :json => @comments.to_json(:include => [:post, :user]), status: :ok
   end
 
   # GET /comments/1
   # GET /comments/1.json
   def show
+    @comment = Comment.find(params[:id])
+    render :json => @comment.to_json(:include => [:post, :user]), status: :ok
   end
 
   # GET /comments/new
@@ -21,27 +26,19 @@ class CommentsController < ApplicationController
   def edit
   end
 
-  # POST /comment/:id
+  # POST /comments
   def create
     begin
-      post = Post.find(params[:id].to_i)
-      if params[:comment]
+      if params[:post_id] && params[:user_id] && params[:text]
         comment = Comment.new(comment_params)
         comment.save!
-        render json: "comment added to post successfully", status: :ok
+        render json: "comment created successfully", status: :ok
       else
-        render json: "wrong params", status: :ok
+        render json: "wrong params", status: :unprocessable_entity
       end
-       
-    rescue
-      render json: "errors", status: :unprocessable_entity
+    rescue 
+      render json: "error", status: :unprocessable_entity
     end
-  end
-
-
-  
-  def comment
-    
   end
 
   # PATCH/PUT /comments/1

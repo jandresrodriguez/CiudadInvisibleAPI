@@ -46,8 +46,6 @@ Rails.application.routes.draw do
 
   post '/preferences_posts' => 'posts#preferences_posts'
 
-  post '/comment' => 'posts#comment'
-
   get '/search/:search_text' => 'posts#search_post'
 
   #MOBILE

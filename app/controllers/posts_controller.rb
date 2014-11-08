@@ -59,7 +59,7 @@ class PostsController < ApplicationController
           end
         end
         @post.save!
-        render json: @post, status: :ok
+        render json: @post.to_json(include: {:categories {only: [:name]}  }), status: :ok
       else
         render json: @post.errors, status: :unprocessable_entity 
       end

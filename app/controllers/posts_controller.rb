@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     @posts = Post.all
     respond_to do |format|
       format.html
-      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }} , :methods => [:author, :favorites_quantity, :comments])}
+      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}} , :methods => [:author, :favorites_quantity, :comments])}
     end
   end
 
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])}
+      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}}, :methods => [:author, :favorites_quantity, :comments])}
     end
   end
 
@@ -59,7 +59,7 @@ class PostsController < ApplicationController
           end
         end
         @post.save!
-        render json: @post.to_json(include: {:categories {only: [:name]}  }), status: :ok
+        render json: @post.to_json(:include => { :categories => { :only => [:name]}}), status: :ok
       else
         render json: @post.errors, status: :unprocessable_entity 
       end

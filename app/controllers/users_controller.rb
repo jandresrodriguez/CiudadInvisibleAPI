@@ -15,9 +15,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user
       if @user.login_type == "facebook" || @user.login_type == "twitter"
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}} } , methods: [:followers_quantity , :followed_quantity])
+        #render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}} } , methods: [:followers_quantity , :followed_quantity, :favorites_quantity])
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:followers_quantity , :followed_quantity, :favorites_quantity])
       else
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}  }} , methods: [:followers_quantity , :followed_quantity, :file_url ] )
+        #render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}  }} , methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )
       end
     else
       render json: "No existe el usuario", status: :unprocessable_entity

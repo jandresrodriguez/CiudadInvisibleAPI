@@ -393,11 +393,12 @@ class PostsController < ApplicationController
     end
   end
 
-  #POST /search
+  #POST /search/:search_text
   def search_post
     begin
       if params[:search_text]
-
+        posts = Post.where('title LIKE ?', "%#{params[:search_text]}%")
+        render :json => posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else
         render json: "wrong params", status: :unprocessable_entity
       end

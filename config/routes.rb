@@ -48,6 +48,8 @@ Rails.application.routes.draw do
 
   post '/comment' => 'posts#comment'
 
+  get '/search/:search_text' => 'posts#search_post'
+
   #MOBILE
   post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'

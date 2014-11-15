@@ -6,12 +6,11 @@
   background-color: #3256ca;
 
   .container{
-  	width: 900px;
-  	margin-left: 25%;
+  	max-width: 900px;
 
   	a{
-	  color: #fff;
-
+	    color: #fff;
+    }
 	  .slash{
 	  	font-size: 25px;
 	  	position: relative;
@@ -28,11 +27,10 @@
 	  	margin-right: 10px;
 	  	margin-top: 0px;
 	  }
-	}
 
-	a:hover{
+	  a:hover{
 		background-color: transparent;
-	}
+	  }
   }
 }
 
@@ -42,7 +40,7 @@
   margin-top:50px;
 
   .container{
-
+    max-width: 900px;
   	h1,h2,h3,h4,h5{
   	  font-weight: 100;
   	  color: #3256ca;
@@ -65,8 +63,6 @@
 		  font-weight: 500;
 		}
 	}
-  	width: 900px;
-  	margin-left: 25%;
   }
 }
 

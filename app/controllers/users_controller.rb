@@ -285,7 +285,7 @@ class UsersController < ApplicationController
       params[:n] ? n=params[:n].to_i : n=10
       popular_users_ids = []
       followers_quantity = Relationship.group(:followed_id).count
-      followers_quantity.sort_by{ |k,v| v}.reverse.first(params[:n].to_i).each{ |id,followed| popular_users_ids<<id}
+      followers_quantity.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| popular_users_ids<<id}
       popular_users = []
       popular_users_ids.each do |user|
         popular_users << User.find_by_id(user)

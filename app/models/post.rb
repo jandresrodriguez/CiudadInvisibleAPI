@@ -35,6 +35,11 @@ class Post < ActiveRecord::Base
     Favorite.where(post_id: id).count
   end
 
+  def comments_quantity
+    comments = Comment.where(post_id: id)
+    comments.count
+  end
+
   def comments
     comments = Comment.where(post_id: id)
     returnable_array = []

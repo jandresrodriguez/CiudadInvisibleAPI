@@ -9,7 +9,7 @@ class PostsController < ApplicationController
     @posts = Post.all
     respond_to do |format|
       format.html
-      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}} , :methods => [:author, :favorites_quantity, :comments])}
+      format.json { render :json => @posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}} , :methods => [:author, :favorites_quantity, :comments, :comments_quantity])}
     end
   end
 
@@ -19,7 +19,7 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}}, :methods => [:author, :favorites_quantity, :comments])}
+      format.json { render :json => @post.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}}, :methods => [:author, :favorites_quantity, :comments, :comments_quantity])}
     end
   end
 
@@ -135,7 +135,7 @@ class PostsController < ApplicationController
       if posts.empty?
         render json: "no posts", status: :ok
       else
-        render json: posts.to_json(:methods => [:first_image, :favorites_quantity]), status: :ok
+        render json: posts.to_json(:methods => [:first_image, :favorites_quantity, :comments_quantity]), status: :ok
       end
       
     else
@@ -169,7 +169,7 @@ class PostsController < ApplicationController
         render json: "no hay votos", status: :ok
       else
         posts_to_return = get_popular_posts(votes, params[:n])
-        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:favorites_quantity, :author_avatar]), status: :ok
+        render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:favorites_quantity, :author_avatar, :comments_quantity]), status: :ok
       end
     rescue
       render json: "error", status: :unprocessable_entity
@@ -184,7 +184,7 @@ class PostsController < ApplicationController
         followed_users = User.find_by_id(params[:user_id]).followed_users.pluck(:id)
         unless followed_users.nil? || followed_users.empty?
           posts_to_return = get_followed_posts(followed_users,n)
-          render json: posts_to_return.to_json(:methods => [:first_image, :favorites_quantity]), status: :ok
+          render json: posts_to_return.to_json(:methods => [:first_image, :favorites_quantity, :comments_quantity]), status: :ok
         else
           render json: "no followers", status: :ok
         end

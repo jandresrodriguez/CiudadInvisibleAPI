@@ -417,7 +417,9 @@ class PostsController < ApplicationController
       if params[:distance] && params[:latitude] && params[:longitude]
         params[:n] ? n=params[:n].to_i : n=50
         posts = posts_near(params[:latitude].to_f, params[:longitude].to_f, params[:distance].to_i)
-        render json: posts.limit(n).to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author), status: :ok
+        
+        json_object = JSON.parse(posts.limit(n).to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author)) 
+        render json: JSON.pretty_generate(json_object), status: :ok
       else
         render json: "Wrong params", status: :unprocessable_entity
       end
@@ -432,7 +434,9 @@ class PostsController < ApplicationController
       params[:n] ? n=params[:n].to_i : n=50
       votes = Favorite.group(:post_id).count
       posts = get_popular_posts(votes, n)
-      render json: posts.to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author), status: :ok
+
+      json_object = JSON.parse(posts.to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author)) 
+      render json: JSON.pretty_generate(json_object), status: :ok
     rescue
       render json: "Unexpected error", status: :unprocessable_entity
     end

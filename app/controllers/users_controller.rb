@@ -256,8 +256,7 @@ class UsersController < ApplicationController
         @user.avatar = data
       end
       if @user.update(user_params)
-        format.html { render json: @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
+        render json: @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -290,7 +289,7 @@ class UsersController < ApplicationController
       popular_users_ids.each do |user|
         popular_users << User.find_by_id(user)
       end
-      render json: pretty_generatepopular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity), status: :ok
+      render json: popular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity), status: :ok
     rescue
       render json: "Unexpected error", status: :unprocessable_entity
     end

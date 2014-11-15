@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'posts#index'
+  root 'api#index'
 
   get '/posts_by_user/:user_id' => 'posts#posts_by_user' 
   post '/posts_nearby' => 'posts#posts_nearby' 
@@ -57,8 +57,8 @@ Rails.application.routes.draw do
   post 'comment' => 'comments#comment'
 
   #OPEN DATA
-  get '/v1/places/' => 'posts#create_mobile'
-  get '/v1/popular_places/' => 'posts#create_mobile'
+  get '/v1/places/' => 'posts#places_near'
+  get '/v1/popular_places/' => 'posts#places_near'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

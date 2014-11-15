@@ -275,6 +275,27 @@ class UsersController < ApplicationController
     end
   end
 
+  #-----------------------------------------------------------------------------------------------
+  # API ENDPOINTS - PUBLIC
+  #-----------------------------------------------------------------------------------------------
+  
+  #GET /v1/popular_users/
+  def public_popular
+    begin
+      params[:n] ? n=params[:n].to_i : n=10
+      popular_users_ids = []
+      followers_quantity = Relationship.group(:followed_id).count
+      followers_quantity.sort_by{ |k,v| v}.reverse.first(n).each{ |id,followed| popular_users_ids<<id}
+      popular_users = []
+      popular_users_ids.each do |user|
+        popular_users << User.find_by_id(user)
+      end
+      render json: JSON.pretty_generate popular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity), status: :ok
+    rescue
+      render json: "Unexpected error", status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
@@ -283,6 +304,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:username, :email, :first_name, :last_name, :facebook_id, :twitter_id, :city, :country, :password, :avatar)
+      params.require(:user).permit(:username, :email, :first_name, :last_name, :facebook_id, :twitter_id, :city, :country, :password, :avatar, :bio)
     end
 end

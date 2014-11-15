@@ -408,20 +408,16 @@ class PostsController < ApplicationController
   end
 
   #-----------------------------------------------------------------------------------------------
-  # API ENDPOINTS
+  # API ENDPOINTS - PUBLIC
   #-----------------------------------------------------------------------------------------------
   
   #GET /v1/places/
-  def places_near
+  def public_near
     begin
       if params[:distance] && params[:latitude] && params[:longitude]
         params[:n] ? n=params[:n].to_i : n=50
         posts = posts_near(params[:latitude].to_f, params[:longitude].to_f, params[:distance].to_i)
-        if posts.empty?
-          render json: "empty", status: :ok
-        else
-          render json: posts.limit(n), status: :ok
-        end
+        render json: posts.limit(n).to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author), status: :ok
       else
         render json: "Wrong params", status: :unprocessable_entity
       end
@@ -429,7 +425,18 @@ class PostsController < ApplicationController
       render json: "Unexpected error", status: :unprocessable_entity
     end
   end
-
+  
+  #GET /v1/popular_places/
+  def public_popular
+    begin
+      params[:n] ? n=params[:n].to_i : n=50
+      votes = Favorite.group(:post_id).count
+      posts = get_popular_posts(votes, n)
+      render json: posts.to_json(only: [:id, :title, :description, :date, :latitude, :longitude], include: { assets: {only: [],methods: :file_url }}, methods: :author), status: :ok
+    rescue
+      render json: "Unexpected error", status: :unprocessable_entity
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

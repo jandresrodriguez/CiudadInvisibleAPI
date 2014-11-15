@@ -290,7 +290,7 @@ class UsersController < ApplicationController
       popular_users_ids.each do |user|
         popular_users << User.find_by_id(user)
       end
-      render json: JSON.pretty_generate popular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity), status: :ok
+      render json: pretty_generatepopular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity), status: :ok
     rescue
       render json: "Unexpected error", status: :unprocessable_entity
     end

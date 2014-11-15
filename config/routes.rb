@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'api/index'
+
   resources :notifications
 
   resources :tours

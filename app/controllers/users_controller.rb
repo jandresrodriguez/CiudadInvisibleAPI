@@ -247,7 +247,6 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    respond_to do |format|
       if params[:avatar64]
         data = StringIO.new(Base64.decode64(params[:avatar64][:data]))
         data.class.class_eval { attr_accessor :original_filename, :content_type }
@@ -258,8 +257,7 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         render json: @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )
       else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        render json: @user.errors, status: :unprocessable_entity 
       end
     end
   end

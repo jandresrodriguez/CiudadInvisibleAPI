@@ -1,3 +1,333 @@
-<h1>API</h1>
+<!-- Navigation -->
+  <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+          <i class="fa fa-bars"></i>
+         </button>
+         <a class="navbar-brand page-scroll" href="#page-top">
+          <img class="logo" src="assets/logo.png" alt="ciudadinvisble" height=20><span class="slash">/ </span><span class="light developers">developers</span>
+        </a>
+      </div>
 
-<pre><code>var ciudadinvisible;</code></pre>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+        <ul class="nav navbar-nav">
+          <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+          <li class="hidden">
+            <a href="#page-top"></a>
+          </li>
+          <li>
+            <a class="page-scroll" href="#about">Documentation</a>
+          </li>
+          <li>
+            <a class="page-scroll" href="#contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+  <div class="content">
+  	<div class="container">
+  	  <br>
+  	  <h1>Documentation</h1>
+  	  <p>The Ciudad Invisible Platform connects your website or application with the worldwide invisible places.</p>
+  	  <br>
+  	  <h2>REST API</h2>
+  	  <br>
+  	  <h3>GET /places</h3>
+  	  <p>Returns a collection of the nearby invisible places posted by the users at Ciudad Invisible.</p>
+  	  <h4>Resource URL</h4>
+	  <pre><code class="nohighlight">https://api.ciudadinvisble.org/v1/places?latitude=50.555555&&longitude=-50.555555&&distance=2&&n=25</code></pre>
+	  <br>
+	  <h4>Params</h4>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>latitude</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  Latitude of actual location.
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  required
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> 50.555555
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>longitude</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  Longitude of actual location.
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  required
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> -50.555555
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>distance</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  The distance of the radius in order to get the nearby places (In Kilometres)
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  required
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> 2
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>n</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  The quantity of places required.
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  optional
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> 25
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <br>
+	  <h4>Example Result</h4>
+	  <br>
+	  <pre><code class=" json railscasts">
+[
+  {
+    "id": 59,
+    "title": "Otra vez mas probando",
+    "description": "Este parece que funcionó ok con todas las fotos....",
+    "date": "2014-09-20T00:38:23.000Z",
+    "latitude": -34.9132194458691,
+    "longitude": -56.1650034687866,
+    "author": "Damian2 Marcos2",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/035/original/foto?1414627520"
+      },
+      {
+        "file_url": "http://assets/files/000/000/037/original/foto?1414627579"
+      },
+      {
+        "file_url": "http://assets/files/000/000/038/original/foto?1414627597"
+      }
+    ]
+  },
+  {
+    "id": 78,
+    "title": "PPP",
+    "description": "Ingrese una breve descripción de su lugar invisible.",
+    "date": "2014-11-08T20:37:20.000Z",
+    "latitude": -34.9087458,
+    "longitude": -56.1614022137041,
+    "author": "Mathias Carignani",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/065/original/PPP.png?1415479045"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "Pepe",
+    "description": "Pepe asdhjasdjh asdgajsdg",
+    "date": "2014-10-18T15:03:50.000Z",
+    "latitude": -34.9087458,
+    "longitude": -56.1614022137041,
+    "author": "Mathias Carignani",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/001/original/Pepe.png?1413644638"
+      },
+      {
+        "file_url": "http://assets/files/000/000/002/original/Pepe.png?1413644648"
+      },
+      {
+        "file_url": "http://assets/files/000/000/003/original/Pepe.png?1413644661"
+      }
+    ]
+  }
+]
+	  </code></pre>
+	  <br>
+	  <h3>GET /popular_places</h3>
+  	  <p>Returns a collection of the popular invisible places posted by the users at Ciudad Invisible.</p>
+	  <h4>Resource URL</h4>
+	  <pre><code class="nohighlight">https://api.ciudadinvisble.org/v1/popular_places?n=25</code></pre>
+	  <br>
+	  <h4>Params</h4>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>n</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  The quantity of places required.
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  optional
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> 25
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <br>
+	  <h4>Example Result</h4>
+	  <pre><code>
+[
+  {
+    "id": 59,
+    "title": "Otra vez mas probando",
+    "description": "Este parece que funcionó ok con todas las fotos....",
+    "date": "2014-09-20T00:38:23.000Z",
+    "latitude": -34.9132194458691,
+    "longitude": -56.1650034687866,
+    "author": "Damian3 Marcos3",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/035/original/foto?1414627520"
+      },
+      {
+        "file_url": "http://assets/files/000/000/037/original/foto?1414627579"
+      },
+      {
+        "file_url": "http://assets/files/000/000/038/original/foto?1414627597"
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "title": "qwqweqweqwe",
+    "description": "asdasdasdadasdqweqwe",
+    "date": "2014-09-20T00:38:23.000Z",
+    "latitude": null,
+    "longitude": null,
+    "author": "Bar Siete",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/039/original/foto?1414628021"
+      },
+      {
+        "file_url": "http://assets/files/000/000/040/original/foto?1414628034"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "title": "Pepe",
+    "description": "Pepe asdhjasdjh asdgajsdg asdjhgas",
+    "date": "2014-10-18T15:03:50.000Z",
+    "latitude": -34.9087458,
+    "longitude": -56.1614022137041,
+    "author": "Mathias Carignani",
+    "assets": [
+      {
+        "file_url": "http://assets/files/000/000/001/original/Pepe.png?1413644638"
+      },
+      {
+        "file_url": "http://assets/files/000/000/002/original/Pepe.png?1413644648"
+      },
+      {
+        "file_url": "http://assets/files/000/000/003/original/Pepe.png?1413644661"
+      }
+    ]
+  }
+]
+	  </code></pre>
+	  <br>
+	  <h3>GET /popular_users</h3>
+  	  <p>Returns a collection of the popular users in Ciudad Invisible.</p>
+	  <h4>Resource URL</h4>
+	  <pre><code class="nohighlight">https://api.ciudadinvisble.org/v1/popular_users?n=3</code></pre>
+	  <br>
+	  <h4>Params</h4>
+	  <div class="row separation">
+	  	<div class="col-md-12">
+		  <div class="row">
+		  	<div class="col-md-4">
+		  	  <b>n</b>
+		  	</div>
+		  	<div class="col-md-8">
+		  	  The quantity of users required.
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-md-4 light-font">
+		  	  optional
+		  	</div>
+		  	<div class="col-md-8">
+		  	  <b>Example value:</b> 25
+		  	</div>
+		  </div>
+	  	</div>
+	  </div>
+	  <h4>Example Result</h4>
+	  <pre><code>
+[
+  {
+    "id": 2,
+    "first_name": "Damian3",
+    "last_name": "Marcos3",
+    "bio": "Esta es mi biografía. Soy hincha del bolso y lo sigo a todos lados!! Esta web está quedando buena de a poco!!",
+    "posts_quantity": 24
+  },
+  {
+    "id": 3,
+    "first_name": "Bar",
+    "last_name": "Siete",
+    "bio": null,
+    "posts_quantity": 3
+  },
+  {
+    "id": 5,
+    "first_name": "Damian",
+    "last_name": "Marcos",
+    "bio": null,
+    "posts_quantity": 0
+  }
+]
+	  </code></pre>
+	  <br>
+	  </div>
+  	</div>
+  </div>

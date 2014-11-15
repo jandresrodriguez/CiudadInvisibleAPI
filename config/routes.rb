@@ -57,8 +57,9 @@ Rails.application.routes.draw do
   post 'comment' => 'comments#comment'
 
   #OPEN DATA
-  get '/v1/places/' => 'posts#places_near'
-  get '/v1/popular_places/' => 'posts#places_near'
+  get '/v1/places/' => 'posts#public_near'
+  get '/v1/popular_places/' => 'posts#public_popular'
+  get '/v1/popular_users' => 'users#public_popular'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

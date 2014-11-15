@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_many :favorites
   has_many :favorites_posts, through: :favorites, source: :post
+
+  has_many :posts
 	
 	has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "https://s3-sa-east-1.amazonaws.com/ciudadinvisible/users/avatars/000/000/no-avatar.png"
 	validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
@@ -48,5 +50,9 @@ class User < ActiveRecord::Base
 
   def favorites_quantity
     favorites.count
+  end
+
+  def posts_quantity
+    posts.count
   end
 end

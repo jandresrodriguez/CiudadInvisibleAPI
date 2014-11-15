@@ -168,7 +168,7 @@ class PostsController < ApplicationController
       if votes.empty?
         render json: "no hay votos", status: :ok
       else
-        posts_to_return = get_popular_posts(votes)
+        posts_to_return = get_popular_posts(votes, params[:n])
         render json: posts_to_return.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:favorites_quantity, :author_avatar]), status: :ok
       end
     rescue
@@ -405,7 +405,29 @@ class PostsController < ApplicationController
     rescue 
       render json: "error", status: :unprocessable_entity
     end
-    
+  end
+
+  #-----------------------------------------------------------------------------------------------
+  # API ENDPOINTS
+  #-----------------------------------------------------------------------------------------------
+  
+  #GET /v1/places/
+  def places_near
+    begin
+      if params[:distance] && params[:latitude] && params[:longitude]
+        params[:n] ? n=params[:n].to_i : n=50
+        posts = posts_near(params[:latitude].to_f, params[:longitude].to_f, params[:distance].to_i)
+        if posts.empty?
+          render json: "empty", status: :ok
+        else
+          render json: posts.limit(n), status: :ok
+        end
+      else
+        render json: "Wrong params", status: :unprocessable_entity
+      end
+    rescue
+      render json: "Unexpected error", status: :unprocessable_entity
+    end
   end
 
 
@@ -426,10 +448,10 @@ class PostsController < ApplicationController
       posts
     end
 
-    def get_popular_posts(votes)
+    def get_popular_posts(votes, n)
       posts_to_return = []
       popular_posts = []
-      params[:n] ? n=params[:n].to_i : n=10
+      n ? n=n.to_i : n=10
       votes.sort_by{ |k,v| v}.reverse.first(n).each{ |id,votes| popular_posts<<id}
       popular_posts.each do |post_id|
         posts_to_return << Post.find_by_id(post_id)

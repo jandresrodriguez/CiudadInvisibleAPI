@@ -53,6 +53,10 @@ Rails.application.routes.draw do
   post '/assets_mobile/:id' => 'posts#assets_mobile'
 
   post 'comment' => 'comments#comment'
+
+  #OPEN DATA
+  get '/v1/places/' => 'posts#create_mobile'
+  get '/v1/popular_places/' => 'posts#create_mobile'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

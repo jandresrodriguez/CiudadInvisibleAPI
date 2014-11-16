@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     if @user
       if @user.login_type == "facebook" || @user.login_type == "twitter"
         #render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}} } , methods: [:followers_quantity , :followed_quantity, :favorites_quantity])
-        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:followers_quantity , :followed_quantity, :favorites_quantity])
+        render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:followers_quantity , :followed_quantity, :favorites_quantity, :file_url])
       else
         #render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], include: { favorites_posts: { only: [:id, :title], include: { assets: { only: :id, methods: :file_url}}  }} , methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )
         render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )

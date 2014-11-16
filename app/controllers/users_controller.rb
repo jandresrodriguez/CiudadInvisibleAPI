@@ -256,7 +256,7 @@ class UsersController < ApplicationController
         @user.avatar = data
       end
       if @user.update(user_params)
-        format.json { render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url) }
+        format.json { render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :url_avatar], methods: [:followers_quantity , :followed_quantity, :file_url, :favorites_quantity ] )}
         format.html { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }

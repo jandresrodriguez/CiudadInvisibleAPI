@@ -195,7 +195,7 @@ class UsersController < ApplicationController
         if followers.empty?
           render json: "user not has any follower", status: :ok
         else
-          render json: followers.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
+          render json: followers.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:file_url,:followers_quantity]), status: :ok
         end
       else
         render json: "wrong params", status: :unprocessable_entity
@@ -214,7 +214,7 @@ class UsersController < ApplicationController
         if followed_users.empty?
           render json: "user isnt following any user", status: :ok
         else
-          render json: followed_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: :file_url), status: :ok
+          render json: followed_users.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at ] , methods: [:file_url,:followers_quantity]), status: :ok
         end
       else
         render json: "wrong params", status: :unprocessable_entity

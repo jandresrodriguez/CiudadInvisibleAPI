@@ -77,7 +77,7 @@ class UsersController < ApplicationController
 
     # POST /login_twitter
   def create_twitter
-    @user = User.where(twitter_id: user_params[:twitter_id]).first
+    @user = User.where(username: user_params[:username]).first
     if @user
       # Retorna el usuario
         render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)

@@ -23,7 +23,7 @@ module RESTPosts
     config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
+        resource '*', :headers => :any, :methods => [:get,:put,:delete,:post,:options]
       end
     end
   end

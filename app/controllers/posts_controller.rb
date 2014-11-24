@@ -135,7 +135,7 @@ class PostsController < ApplicationController
       if posts.empty?
         render json: "no posts", status: :ok
       else
-        render json: posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}} , :methods => [:author, :author_avatar, :favorites_quantity, :comments, :comments_quantity]), status: :ok
+        render json: posts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }, :categories => {:only => [:name]}} , :methods => [:author, :author_avatar, :favorites_quantity, :comments, :comments_quantity, :first_image]), status: :ok
       end
       
     else

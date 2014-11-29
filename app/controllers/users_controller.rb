@@ -275,6 +275,16 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /reset_password
+  def reset_password
+    if params[:email]
+      user = User.where(email: params[:email]).first
+      token = SecureRandom.hex(8) + (Time.now.to_f * 1000).to_i.to_s
+      user.token = token
+      user.save!
+    end
+  end
+
   #-----------------------------------------------------------------------------------------------
   # API ENDPOINTS - PUBLIC
   #-----------------------------------------------------------------------------------------------

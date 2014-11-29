@@ -26,24 +26,6 @@ class CommentsController < ApplicationController
   def edit
   end
 
-  # PUT Comment
-  def comment
-    begin
-      if params[:post_id] && params[:user_id] && params[:text]
-        @comment = Comment.new(comment_params)
-        if @comment.save
-          render json: "comment created successfully", status: :ok
-        else
-          render json: @comment.errors, status: :unprocessable_entity
-        end
-      else
-        render json: "wrong params", status: :unprocessable_entity
-      end
-    rescue 
-      render "error", status: :unprocessable_entity
-    end
-  end
-
   # POST /comments
   def create
     begin

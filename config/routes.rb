@@ -50,6 +50,9 @@ Rails.application.routes.draw do
 
   get '/search/:search_text' => 'posts#search_post'
 
+  post '/reset_password' => "users#reset_password"
+  get '/accounts/:token' => "users#set_password"
+
   #MOBILE
   post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'

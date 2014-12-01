@@ -278,12 +278,35 @@ class UsersController < ApplicationController
 
   # POST /reset_password
   def reset_password
-    if params[:email]
-      user = User.where(email: params[:email]).first
-      token = SecureRandom.hex(8) + (Time.now.to_f * 1000).to_i.to_s
-      user.token = token
-      user.save!
+    begin
+      if params[:email]
+        user = User.where(email: params[:email]).first
+        token = SecureRandom.hex(8) + (Time.now.to_f * 1000).to_i.to_s
+        user.token = token
+        user.save!
+        Notifier.password_recovery(user).deliver
+        render json: "Email sent", status: :ok
+      else
+        render json: "wrong params", status: :unprocessable_entity 
+      end
+    rescue 
+      render json: "server error", status: 500 
     end
+    
+  end
+
+  # GET /accounts/:token
+  def set_password
+    begin
+      if params[:token]
+        @user = User.where(token: params[:token]).first
+      else
+        render json: "wrong params", status: :unprocessable_entity 
+      end
+    rescue
+      render json: "server error", status: 500 
+    end
+    
   end
 
   #-----------------------------------------------------------------------------------------------

@@ -1,6 +1,13 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587, # ports 587 and 2525 are also supported with STARTTLS
+    :user_name => "jandres.rodriguezg@gmail.com",
+    :password  => "BhpbJnF9VAma7bAiOPR7CA", # SMTP password is any valid API key
+  }
+  
   # Code is not reloaded between requests.
   config.cache_classes = true
 

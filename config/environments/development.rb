@@ -13,6 +13,13 @@ Rails.application.configure do
     :access_key_id => '',
     :secret_access_key => ''}
   }
+
+  config.action_mailer.smtp_settings = {
+    :address   => "smtp.mandrillapp.com",
+    :port      => 587, # ports 587 and 2525 are also supported with STARTTLS
+    :user_name => "jandres.rodriguezg@gmail.com",
+    :password  => "", # SMTP password is any valid API key
+  }
   
   config.cache_classes = false
 

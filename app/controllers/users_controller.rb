@@ -118,6 +118,7 @@ class UsersController < ApplicationController
     if params[:email] && params[:password]
       @user = User.where(email: params[:email], password: params[:password]).first
       if @user
+        Notifier.send_signup_email(@user).deliver
         render :json => @user.to_json(:except => [:password, :created_at, :updated_at, :avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at, :url_avatar ] , methods: :file_url)
       else
         render json: "usuario o contrasena incorrecta", status: :unprocessable_entity 

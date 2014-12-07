@@ -11,7 +11,8 @@ class Notifier < ActionMailer::Base
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def password_recovery(user)
     @user = user
-    mail( :to => @user.email,
-    :subject => 'Thanks for signing up for our amazing app' )
+    if user.token
+      mail( :to => @user.email, :subject => 'Password Recovery' )  
+    end
   end
 end

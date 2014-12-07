@@ -292,14 +292,30 @@ class UsersController < ApplicationController
     rescue 
       render json: "server error", status: 500 
     end
-    
   end
 
   # GET /accounts/:token
-  def set_password
+  def get_user_by_token
     begin
       if params[:token]
         @user = User.where(token: params[:token]).first
+        render json: @user
+      else
+        render json: "wrong params", status: :unprocessable_entity 
+      end
+    rescue
+      render json: "server error", status: 500 
+    end
+  end
+
+  # POST /accounts/:token
+  def set_password
+    begin
+      if params[:token] && params[:password] && params[:repeat]
+        @user = User.where(token: params[:token]).first
+        @user.password = params[:password]
+        @user.save!
+        render json: "password changed ok"
       else
         render json: "wrong params", status: :unprocessable_entity 
       end

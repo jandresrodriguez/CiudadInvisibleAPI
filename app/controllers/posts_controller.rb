@@ -354,7 +354,7 @@ class PostsController < ApplicationController
         tour = Tour.new
         tour.user_id = params[:user_id]
         tour.save!
-        nearby_posts = Post.near([params[:latitude], params[:longitude]], 5, :units => :km).first(30)
+        nearby_posts = Post.near([params[:latitude], params[:longitude]], 2, :units => :km).first(30)
         unless nearby_posts.empty?
           posts_to_see_unordered = nearby_posts.sample(5)
           posts_to_see_unordered

@@ -356,35 +356,15 @@ class PostsController < ApplicationController
         tour.save!
         nearby_posts = Post.near([params[:latitude], params[:longitude]], 5, :units => :km).first(30)
         unless nearby_posts.empty?
-          puts "-----nearby posts------"
-          puts nearby_posts.to_json
-          puts "-----------"
           posts_to_see_unordered = nearby_posts.sample(5)
-          puts "-----posts_to_see_unordered------"
-          puts posts_to_see_unordered.to_json
-          puts "-----------"
+          posts_to_see_unordered
           start_point = closest(params[:latitude],params[:longitude],posts_to_see_unordered)
-          puts "-----start_point------"
-          puts start_point.to_json
-          puts "-----------"
           posts_to_see_unordered.delete(start_point)
-          puts "------posts_to_see_unordered-----"
-          puts posts_to_see_unordered.to_json
-          puts "-----------"
-          place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: 1)
-          i=2
+          i=1
           while posts_to_see_unordered.size > 0
-            puts "-----start_point------"
-            puts start_point.to_json
-            puts "-----------"
+            posts_to_see_unordered
             closest = closest(start_point.latitude,start_point.longitude,posts_to_see_unordered)
-            puts "-----closest------"
-            puts closest.to_json
-            puts "-----------"
             posts_to_see_unordered.delete(closest)
-            puts "------posts_to_see_unordered while-----"
-            puts posts_to_see_unordered.to_json
-            puts "-----------"
             place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: i)
             i = i + 1
             start_point = closest
@@ -505,11 +485,11 @@ class PostsController < ApplicationController
       posts
     end
 
-    def closest(longitude_start,latitude_start, places)
+    def closest(latitude_start,longitude_start, places)
       min_distance = 100000
       near_place_id = nil
       places.each do |place|
-        distance = Geocoder::Calculations.distance_between([latitude_start,longitude_start], [place.latitude,place.longitude])
+        distance = place.distance_from([latitude_start,longitude_start])
         if distance < min_distance
           min_distance = distance
           near_place_id = place.id

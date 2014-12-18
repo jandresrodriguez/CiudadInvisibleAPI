@@ -138,6 +138,9 @@ class UsersController < ApplicationController
           render json: "empty", status: :unprocessable_entity
         else
           follower.follow!(followed)
+          notification = Notification.new(creator_id: follower.id, receiver_id: followed.id, type: "Following")
+          notification.set_notification_data()
+          Notifier.send_notification(notification)
           render json: "followed added with success", status: :ok
         end
       else
@@ -281,11 +284,15 @@ class UsersController < ApplicationController
     begin
       if params[:email]
         user = User.where(email: params[:email]).first
-        token = SecureRandom.hex(8) + (Time.now.to_f * 1000).to_i.to_s
-        user.token = token
-        user.save!
-        Notifier.password_recovery(user).deliver
-        render json: "Email sent", status: :ok
+        if user
+          token = SecureRandom.hex(8) + (Time.now.to_f * 1000).to_i.to_s
+          user.token = token
+          user.save!
+          Notifier.password_recovery(user).deliver
+          render json: "Email sent", status: :ok
+        else
+          render json: "doesnt has mail", status: :unprocessable_entity 
+        end
       else
         render json: "wrong params", status: :unprocessable_entity 
       end
@@ -299,7 +306,10 @@ class UsersController < ApplicationController
     begin
       if params[:token]
         @user = User.where(token: params[:token]).first
-        render json: @user
+        if @user
+          render json: @user
+        else
+          render json: "no user", status: :ok 
       else
         render json: "wrong params", status: :unprocessable_entity 
       end

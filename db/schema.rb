@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141129194320) do
+ActiveRecord::Schema.define(version: 20141218215623) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -54,11 +54,18 @@ ActiveRecord::Schema.define(version: 20141129194320) do
   add_index "favorites", ["user_id"], name: "index_favorites_on_user_id"
 
   create_table "notifications", force: true do |t|
-    t.string   "message"
-    t.string   "type"
+    t.integer  "creator_id"
+    t.integer  "post_id"
+    t.string   "notification_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "title"
+    t.text     "message"
+    t.integer  "receiver_id"
   end
+
+  add_index "notifications", ["creator_id"], name: "index_notifications_on_creator_id"
+  add_index "notifications", ["post_id"], name: "index_notifications_on_post_id"
 
   create_table "part_of_tours", force: true do |t|
     t.integer  "post_id"

@@ -13,7 +13,24 @@ class NotificationsController < ApplicationController
   # GET /notifications/1
   # GET /notifications/1.json
   def show
-    Notifier.send_notification(@notification)
+  end
+
+  # GET /notifications_by_user/1
+  def notifications_by_user
+    begin
+      if params[:user_id]
+        notifications = Notification.where(user_id: params[:user_id], read: false)
+        unless notifications.empty?
+          render json: notifications.to_json, status: :ok
+        else
+          render json: "no notifications", status: :ok
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity
+      end
+    rescue
+      render json: "error", status: :unprocessable_entity
+    end
   end
 
   # GET /notifications/new

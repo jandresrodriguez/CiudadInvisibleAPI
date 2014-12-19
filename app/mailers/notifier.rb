@@ -29,7 +29,7 @@ class Notifier < ActionMailer::Base
     body = '{
         "where": {
           "deviceType": "ios",
-          "deviceToken": "fc3de7df1382f67e6cdc902a833735c8a7b0e849b98e6d330e0582c2aef0544f"
+          "deviceToken": "' + user.device_token + '"
         },
         "data": {
           "alert": "' + notification.title + '",

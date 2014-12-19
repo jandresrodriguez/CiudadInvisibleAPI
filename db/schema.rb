@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141218215623) do
+ActiveRecord::Schema.define(version: 20141219022225) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 20141218215623) do
     t.string   "title"
     t.text     "message"
     t.integer  "receiver_id"
+    t.boolean  "read",              default: false
   end
 
   add_index "notifications", ["creator_id"], name: "index_notifications_on_creator_id"
@@ -153,6 +154,7 @@ ActiveRecord::Schema.define(version: 20141218215623) do
     t.string   "url_avatar"
     t.string   "bio"
     t.string   "token"
+    t.string   "device_token"
   end
 
 end

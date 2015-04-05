@@ -18,7 +18,7 @@ class Notifier < ActionMailer::Base
 
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_notification(notification)
-    user = User.find_by_id(notification.user_id)
+    user = User.find_by_id(notification.receiver_id)
     uri = URI.parse("https://api.parse.com/1/push")
     http = Net::HTTP.new(uri.host, uri.port)
 

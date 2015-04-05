@@ -5,20 +5,21 @@ class Notification < ActiveRecord::Base
   belongs_to :post
 
   def set_notification_data(title=nil, message=nil)
-  	creator = User.find_by_id(creator.id)
-  	post = Post.find_by_id(post.id)
-  	case type
+  	creator = User.find_by_id(self.creator.id)
+  	post = Post.find_by_id(self.post.id)
+  	case self.notification_type
   	when "Comment"
-  		title = "#{creator.username} has comment one of your Posts!"
+  		self.title = "#{self.creator.username} has comment one of your Posts!"
   	when "Favorite"
-  		title = "#{user.username} has marked as favorite one of your Posts!"
+  		self.title = "#{self.creator.username} has marked as favorite one of your Posts!"
 		when "Following"
-  		title = "#{user.username} has start to following you!"
+  		self.title = "#{self.creator.username} has start to following you!"
   	when "Draft"
-  		title = "#{post.title} is still in draft!"
+  		self.title = "#{self.post.title} is still in draft!"
   	when "Custom"
-  		if title then title = title end
-  		if message then message = message end
+  		if title then self.title = title end
+  		if message then self.message = message end
   	end
+    self.save!
   end
 end

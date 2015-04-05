@@ -29,7 +29,7 @@ class Notifier < ActionMailer::Base
     body = "{
         'where': {
           'deviceType': 'ios',
-          'deviceToken': '#{user.device_token}'
+          'deviceToken': '#{user.try(:device_token)}'
         },
         'data': {
           'alert': '#{notification.try(:title)}',
@@ -39,6 +39,11 @@ class Notifier < ActionMailer::Base
       }"
     http.use_ssl = true
     response = http.request(request,body)
+    puts "------- DEBUGGING -------"
+    puts "SE MANDOOOOO"
+    puts "#{notification.to_json}"
+    puts "#{user.to_json}"
+    puts "-------------------------"
     if user.email
       mail( :to => user.email, :subject => notification.title )  
     end

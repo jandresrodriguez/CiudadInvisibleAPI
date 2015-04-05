@@ -217,25 +217,40 @@ class PostsController < ApplicationController
 
   #POST /favorite
   def favorite
+    puts "1"
     begin
+      puts "2"
       if params[:user_id] && params[:post_id]
+        puts "3"
         user = User.find(params[:user_id].to_i)
+        puts "4"
         post = Post.find(params[:post_id].to_i)
+        puts "5"
         favorite = Favorite.where(user_id: params[:user_id].to_i, post_id: params[:post_id].to_i)
+        puts "6"
         if user && post && favorite.empty?
+          puts "7"
           favorite = Favorite.new({user_id: user.id, post_id: post.id})
+          puts "8"
           favorite.save!
+          puts "9"
           notification = Notification.new(creator_id: user.id, receiver_id: post.author.id, post: post.id, type: "Favorite")
+          puts "10"
           notification.set_notification_data()
+          puts "11"
           Notifier.send_notification(notification)
+          puts "12"
           render json: "favorite successfully added", status: :ok
         else
+          puts "13"
           render json: "user/post not exist / favorite already exist", status: :unprocessable_entity
         end
       else
+        puts "14"
         render json: "error", status: :unprocessable_entity
       end
     rescue
+      puts "15"
       render json: "error", status: :unprocessable_entity
     end
   end

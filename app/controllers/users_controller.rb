@@ -332,7 +332,6 @@ class UsersController < ApplicationController
     rescue
       render json: "server error", status: 500 
     end
-    
   end
 
   #-----------------------------------------------------------------------------------------------
@@ -350,8 +349,6 @@ class UsersController < ApplicationController
       popular_users_ids.each do |user|
         popular_users << User.find_by_id(user)
       end
-
-
       json_object = JSON.parse(popular_users.to_json(only: [:id, :first_name, :last_name, :bio], methods: :posts_quantity)) 
       render json: JSON.pretty_generate(json_object), status: :ok
     rescue
@@ -369,4 +366,5 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:username, :email, :first_name, :last_name, :facebook_id, :twitter_id, :city, :country, :password, :avatar, :bio, :device_token)
     end
+  end
 end

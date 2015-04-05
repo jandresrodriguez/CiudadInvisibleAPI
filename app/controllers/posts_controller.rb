@@ -234,7 +234,7 @@ class PostsController < ApplicationController
           puts "8"
           favorite.save!
           puts "9"
-          notification = Notification.new(creator_id: user.id, receiver_id: post.author.id, post: post.id, type: "Favorite")
+          notification = Notification.new(creator_id: user.id, receiver_id: post.author.id, post_id: post.id, notification_type: "Favorite")
           puts "10"
           notification.set_notification_data()
           puts "11"
@@ -405,7 +405,7 @@ class PostsController < ApplicationController
       if params[:post_id] && params[:user_id] && params[:comment]
         comment = Comment.new(post_id: params[:post_id], user_id: params[:user_id], text: params[:comment] )
         comment.save!
-        notification = Notification.new(creator_id: comment.user.id, receiver_id: comment.post.author.id, post: comment.post.id, type: "Comment")
+        notification = Notification.new(creator_id: comment.user.id, receiver_id: comment.post.author.id, post_id: comment.post.id, notification_type: "Comment")
         notification.set_notification_data()
         Notifier.send_notification(notification)
         render json: "comment created successfully", status: :ok

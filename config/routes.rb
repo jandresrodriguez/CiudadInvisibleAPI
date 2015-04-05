@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   #MOBILE
   post '/posts_mobile' => 'posts#create_mobile'
   post '/assets_mobile/:id' => 'posts#assets_mobile'
+  post '/device_token' => 'users#set_device_token'
 
   #OPEN DATA
   get '/v1/places/' => 'posts#public_near'

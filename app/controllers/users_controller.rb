@@ -335,6 +335,26 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /device_token
+  def set_device_token
+    begin
+      if params[:device_token] && params[:user_id]
+        user = User.find_by_id(params[:user_id])
+        if user
+          user.device_token = params[:device_token]
+          user.save!
+          render json: "device token setted successfully"
+        else
+          render json: "no user with id", status: :unprocessable_entity 
+        end
+      else
+        render json: "wrong params", status: :unprocessable_entity 
+      end
+    rescue
+      render json: "server error", status: 500 
+    end
+  end
+
   #-----------------------------------------------------------------------------------------------
   # API ENDPOINTS - PUBLIC
   #-----------------------------------------------------------------------------------------------

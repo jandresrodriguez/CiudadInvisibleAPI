@@ -310,6 +310,7 @@ class UsersController < ApplicationController
           render json: @user
         else
           render json: "no user", status: :ok 
+        end
       else
         render json: "wrong params", status: :unprocessable_entity 
       end

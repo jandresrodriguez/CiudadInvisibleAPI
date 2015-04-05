@@ -41,6 +41,7 @@ class Notifier < ActionMailer::Base
     response = http.request(request,body)
     puts "------- DEBUGGING -------"
     puts "SE MANDOOOOO"
+    puts "#{response}"
     puts "#{notification.to_json}"
     puts "#{user.to_json}"
     puts "-------------------------"

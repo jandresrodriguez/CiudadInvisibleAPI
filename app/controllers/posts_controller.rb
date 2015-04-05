@@ -225,6 +225,9 @@ class PostsController < ApplicationController
         if user && post && favorite.empty?
           favorite = Favorite.new({user_id: user.id, post_id: post.id})
           favorite.save!
+          notification = Notification.new(creator_id: user.id, receiver_id: post.author.id, post: post.id, type: "Favorite")
+          notification.set_notification_data()
+          Notifier.send_notification(notification)
           render json: "favorite successfully added", status: :ok
         else
           render json: "user/post not exist / favorite already exist", status: :unprocessable_entity
@@ -387,6 +390,9 @@ class PostsController < ApplicationController
       if params[:post_id] && params[:user_id] && params[:comment]
         comment = Comment.new(post_id: params[:post_id], user_id: params[:user_id], text: params[:comment] )
         comment.save!
+        notification = Notification.new(creator_id: comment.user.id, receiver_id: comment.post.author.id, post: comment.post.id, type: "Comment")
+        notification.set_notification_data()
+        Notifier.send_notification(notification)
         render json: "comment created successfully", status: :ok
       else
         render json: "wrong params", status: :unprocessable_entity

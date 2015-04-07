@@ -18,7 +18,7 @@ class Notifier < ActionMailer::Base
 
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_notification(notification)
-    user = User.find_by_id(notification.receiver.id)
+    @user = User.find_by_id(notification.receiver.id)
     uri = URI.parse("https://api.parse.com/1/push")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
@@ -27,7 +27,7 @@ class Notifier < ActionMailer::Base
     request["Content-Type"] = "application/json"
     body = { where: { 
               deviceType: "ios", 
-              deviceToken: user.try(:device_token) 
+              deviceToken: @user.try(:device_token) 
             }, 
             data: { 
               alert: notification.try(:title), 
@@ -37,8 +37,8 @@ class Notifier < ActionMailer::Base
            }.to_json
     http.use_ssl = true
     response = http.request(request,body)
-    if user.email
-      mail( :to => user.email, :subject => notification.title )  
+    if @user.email
+      mail( :to => @user.email, :subject => notification.title )  
     end
   end
 end

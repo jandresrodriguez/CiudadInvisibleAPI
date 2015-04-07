@@ -4,15 +4,14 @@ class Notifier < ActionMailer::Base
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_signup_email(user)
     @user = user
-    mail( :to => @user.email,
-    :subject => 'Thanks for signing up for our amazing app' )
+    mail(:to => @user.email, :subject => 'Thanks for signing up for our amazing app')
   end
 
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def password_recovery(user)
     @user = user
     if user.token
-      mail( :to => @user.email, :subject => 'Password Recovery' )  
+      mail(:to => @user.email, :subject => 'Password Recovery')  
     end
   end
 
@@ -39,7 +38,7 @@ class Notifier < ActionMailer::Base
     http.use_ssl = true
     response = http.request(request,body)
     if @user.email
-      mail( :to => @user.email, :subject => @notification.try(:title) )  
+      mail(:to => @user.email, :subject => @notification.try(:title)).deliver  
     end
   end
 end

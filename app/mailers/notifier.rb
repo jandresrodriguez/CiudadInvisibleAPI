@@ -25,7 +25,6 @@ class Notifier < ActionMailer::Base
     request["X-Parse-Application-Id"] = "JV9KTqeAA1skH0ZiUE8PSzl7PwmnKptuumpj9pqZ"
     request["X-Parse-REST-API-Key"] = "8zWBkSn9F40y22oN8273qHMeSSeSgLqTXRIqfzFb"
     request["Content-Type"] = "application/json"
-    require 'byebug'; byebug
     body = { where: { 
               deviceType: "ios", 
               deviceToken: user.try(:device_token) 

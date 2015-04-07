@@ -18,6 +18,7 @@ class Notifier < ActionMailer::Base
 
   # send a signup email to the user, pass in the user object that   contains the user's email address
   def send_notification(notification)
+    @notification = notification
     @user = User.find_by_id(notification.receiver.id)
     uri = URI.parse("https://api.parse.com/1/push")
     http = Net::HTTP.new(uri.host, uri.port)
@@ -38,7 +39,7 @@ class Notifier < ActionMailer::Base
     http.use_ssl = true
     response = http.request(request,body)
     if @user.email
-      mail( :to => @user.email, :subject => notification.title )  
+      mail( :to => @user.email, :subject => @notification.try(:title) )  
     end
   end
 end

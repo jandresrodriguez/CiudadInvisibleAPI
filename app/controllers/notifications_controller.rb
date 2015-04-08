@@ -19,7 +19,7 @@ class NotificationsController < ApplicationController
   def notifications_by_user
     begin
       if params[:user_id]
-        notifications = Notification.where(user_id: params[:user_id], read: false)
+        notifications = Notification.where(receiver_id: params[:user_id], read: false)
         unless notifications.empty?
           render json: notifications.to_json, status: :ok
         else
@@ -46,7 +46,7 @@ class NotificationsController < ApplicationController
   # POST /notifications.json
   def create
     @notification = Notification.new(notification_params)
-    if @notification.notification_type.include? NOTIFICATION_TYPE && @notification.save
+    if @notification.save
       Notifier.send_notification(@notification)
       render json: "Created succesfully", status: :ok
     else

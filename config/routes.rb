@@ -63,6 +63,9 @@ Rails.application.routes.draw do
   get '/v1/places/' => 'posts#public_near'
   get '/v1/popular_places/' => 'posts#public_popular'
   get '/v1/popular_users' => 'users#public_popular'
+
+  #Notifications
+  get '/notifications_by_user/:user_id' => 'notifications#notifications_by_user'
   
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -4,6 +4,8 @@ class Notification < ActiveRecord::Base
   belongs_to :creator , :class_name => 'User'
   belongs_to :post
 
+  validates :notification_type, inclusion: { in: NOTIFICATION_TYPE }
+
   def set_notification_data(title=nil, message=nil)
   	creator = User.find_by_id(self.creator.id)
   	post = Post.find_by_id(self.post.id)

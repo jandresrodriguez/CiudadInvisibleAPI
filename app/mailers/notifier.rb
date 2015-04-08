@@ -37,8 +37,5 @@ class Notifier < ActionMailer::Base
            }.to_json
     http.use_ssl = true
     response = http.request(request,body)
-    if @user.email
-      mail(:to => @user.email, :subject => @notification.try(:title)).deliver  
-    end
   end
 end

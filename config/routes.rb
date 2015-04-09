@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   resources :users
 
+  resources :notifications
+
   resources :posts do
     resources :assets
   end

@@ -138,6 +138,7 @@ class UsersController < ApplicationController
           render json: "empty", status: :unprocessable_entity
         else
           follower.follow!(followed)
+          require 'byebug'; byebug
           notification = Notification.new(creator_id: follower.id, receiver_id: followed.id, notification_type: "Following")
           notification.set_notification_data()
           Notifier.send_notification(notification)

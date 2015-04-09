@@ -1,5 +1,5 @@
 class Notification < ActiveRecord::Base
-	NOTIFICATION_TYPE = ["Comment", "Favorite", "Following", "Draft","Custom"]
+	NOTIFICATION_TYPE = ["Comment", "Favorite", "Following", "Draft", "Custom"]
   belongs_to :receiver , :class_name => 'User'
   belongs_to :creator , :class_name => 'User'
   belongs_to :post
@@ -8,7 +8,6 @@ class Notification < ActiveRecord::Base
 
   def set_notification_data(title=nil, message=nil)
   	creator = User.find_by_id(self.creator.id)
-  	post = Post.find_by_id(self.post.id)
   	case self.notification_type
   	when "Comment"
   		self.title = "#{self.creator.username} has comment one of your Posts!"
@@ -17,6 +16,7 @@ class Notification < ActiveRecord::Base
 		when "Following"
   		self.title = "#{self.creator.username} has start to following you!"
   	when "Draft"
+      post = Post.find_by_id(self.post.id)
   		self.title = "#{self.post.title} is still in draft!"
   	when "Custom"
   		if title then self.title = title end

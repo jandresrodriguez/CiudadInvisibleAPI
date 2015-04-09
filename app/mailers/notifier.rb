@@ -16,7 +16,7 @@ class Notifier < ActionMailer::Base
   end
 
   # send a signup email to the user, pass in the user object that   contains the user's email address
-  def send_notification(notification)
+  def send_notification(notification, payload={})
     @notification = notification
     @user = User.find_by_id(notification.receiver.id)
     uri = URI.parse("https://api.parse.com/1/push")
@@ -32,7 +32,7 @@ class Notifier < ActionMailer::Base
             data: { 
               alert: notification.try(:title), 
               sound: "default", 
-              payload: notification.try(:message) 
+              payload: payload
             }
            }.to_json
     http.use_ssl = true

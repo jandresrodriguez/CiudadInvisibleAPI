@@ -226,7 +226,7 @@ class PostsController < ApplicationController
           favorite = Favorite.new({user_id: user.id, post_id: post.id})
           favorite.save!
           notification = Notification.new(creator_id: user.id, receiver_id: post.user.id, post_id: post.id, notification_type: "Favorite")
-          notification.set_notification_data()
+          notification.set_notification_data(nil, nil, params[:post_id])
           Notifier.send_notification(notification)
           render json: "favorite successfully added", status: :ok
         else
@@ -391,7 +391,7 @@ class PostsController < ApplicationController
         comment = Comment.new(post_id: params[:post_id], user_id: params[:user_id], text: params[:comment] )
         comment.save!
         notification = Notification.new(creator_id: comment.user.id, receiver_id: comment.post.user.id, post_id: comment.post.id, notification_type: "Comment")
-        notification.set_notification_data()
+        notification.set_notification_data(nil, nil, params[:post_id])
         Notifier.send_notification(notification)
         render json: "comment created successfully", status: :ok
       else

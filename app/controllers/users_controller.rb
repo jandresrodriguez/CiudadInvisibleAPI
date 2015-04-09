@@ -140,7 +140,7 @@ class UsersController < ApplicationController
           follower.follow!(followed)
           require 'byebug'; byebug
           notification = Notification.new(creator_id: follower.id, receiver_id: followed.id, notification_type: "Following")
-          notification.set_notification_data()
+          notification.set_notification_data(nil, nil, params[:follower])
           Notifier.send_notification(notification)
           render json: "followed added with success", status: :ok
         end

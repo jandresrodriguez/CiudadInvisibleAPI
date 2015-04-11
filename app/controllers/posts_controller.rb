@@ -419,7 +419,7 @@ class PostsController < ApplicationController
   # GET /draft_by_user/:id
   def draft_by_user
     begin
-      @user = User.new(params[:id])
+      @user = User.find(params[:id])
       if @user
         render json: @user.posts.drafts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else

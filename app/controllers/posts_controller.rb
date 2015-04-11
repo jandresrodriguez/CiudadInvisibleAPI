@@ -368,11 +368,11 @@ class PostsController < ApplicationController
           i=1
           while posts_to_see_unordered.size > 0
             puts "4"
-            posts_to_see_unordered.delete(start_point)
-            puts "5"
-            closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
-            puts "#{closest.title}"
-            if closest
+            if start_point
+              posts_to_see_unordered.delete(start_point)
+              puts "5"
+              closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
+              puts "#{closest.title}"
               puts "6"
               place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
               puts "7"
@@ -387,12 +387,15 @@ class PostsController < ApplicationController
           puts "-------------------------"
           render json: tour.to_json(include: { part_of_tours: { include: { post: { include: { assets: { only: [:file_file_name, :file_content_type], methods: :file_url }} , :methods => [:author, :author_avatar, :favorites_quantity, :comments, :comments_quantity, :first_image] }}}}), status: :ok
         else
+          puts "91"
           render json: "Not nearby posts", status: :ok
         end
       else
+        puts "92"
         render json: "wrong params", status: :unprocessable_entity
       end
-    rescue 
+    rescue
+    puts "93" 
       render json: "error", status: :unprocessable_entity
     end
   end

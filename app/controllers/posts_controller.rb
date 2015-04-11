@@ -353,6 +353,7 @@ class PostsController < ApplicationController
   #POST /random_tour
   def random_tour
     begin
+      byebug
       if params[:latitude] && params[:longitude] && params[:user_id]
         tour = Tour.new
         tour.user_id = params[:user_id]
@@ -372,7 +373,7 @@ class PostsController < ApplicationController
               posts_to_see_unordered.delete(start_point)
               puts "5"
               closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
-              puts "#{closest.title}"
+              puts "#{closest.try(:title)}"
               puts "6"
               place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
               puts "7"

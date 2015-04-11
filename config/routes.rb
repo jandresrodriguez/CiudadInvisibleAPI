@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get '/n_posts/:n' => 'posts#n_posts'
   post '/upload_assets' => 'posts#upload_assets'
   get '/popular_posts/:n' => 'posts#popular_posts'
+  get '/draft_by_user/:id' => 'posts#draft_by_user'
 
   get '/followed_posts/:user_id/:n' => 'posts#followed_posts'
 

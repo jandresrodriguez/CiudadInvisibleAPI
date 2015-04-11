@@ -353,31 +353,54 @@ class PostsController < ApplicationController
   #POST /random_tour
   def random_tour
     begin
+      puts "1"
       if params[:latitude] && params[:longitude] && params[:user_id]
+        puts "2"
         tour = Tour.new
+        puts "3"
         tour.user_id = params[:user_id]
+        puts "4"
         tour.save!
+        puts "5"
         nearby_posts = Post.near([params[:latitude], params[:longitude]], 2, :units => :km).first(30)
+        puts "6"
         unless nearby_posts.empty?
+          puts "7"
           posts_to_see_unordered = nearby_posts.sample(5)
+          puts "8"
           start_point = closest(params[:latitude], params[:longitude], posts_to_see_unordered)
+          puts "9"
+          PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: 1)
+          puts "10"
           posts_to_see_unordered.delete(start_point)
-          i=1
+          puts "11"
+          i=2
+          puts "12"
           while posts_to_see_unordered.size > 0
+            puts "13"
             closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
+            puts "14"
             posts_to_see_unordered.delete(closest)
+            puts "15"
             place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: i)
+            puts "16"
             i = i + 1
+            puts "17"
             start_point = closest
+            puts "18"
           end
+          puts "19"
           render json: tour.to_json(include: :posts), status: :ok
         else
+          puts "20"
           render json: "Not nearby posts", status: :ok
         end
       else
+        puts "21"
         render json: "wrong params", status: :unprocessable_entity
       end
     rescue 
+      puts "22"
       render json: "error", status: :unprocessable_entity
     end
   end

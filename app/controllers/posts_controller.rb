@@ -538,7 +538,7 @@ class PostsController < ApplicationController
           near_place = place
         end
       end
-      near_place
       puts "selecciono #{near_place.title}"
+      near_place
     end
 end

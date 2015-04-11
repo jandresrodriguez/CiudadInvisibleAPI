@@ -360,13 +360,11 @@ class PostsController < ApplicationController
         nearby_posts = Post.near([params[:latitude], params[:longitude]], 2, :units => :km).first(30)
         unless nearby_posts.empty?
           posts_to_see_unordered = nearby_posts.sample(5)
-          posts_to_see_unordered
-          start_point = closest(params[:latitude],params[:longitude],posts_to_see_unordered)
+          start_point = closest(params[:latitude], params[:longitude], posts_to_see_unordered)
           posts_to_see_unordered.delete(start_point)
           i=1
           while posts_to_see_unordered.size > 0
-            posts_to_see_unordered
-            closest = closest(start_point.latitude,start_point.longitude,posts_to_see_unordered)
+            closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
             posts_to_see_unordered.delete(closest)
             place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: i)
             i = i + 1
@@ -473,14 +471,7 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(
-      :title, :user_id, :description, :images, 
-      :date, :location, :category, :latitude, 
-      :longitude, assets_attributes: [:id, :post_id, :file],
-      :draft
-      )
-      #, assets_images: [:data, :filename, :content_type]) 
-      #params.require(:post).permit!
+      params.require(:post).permit(:title, :user_id, :description, :images, :date, :location, :category, :latitude, :longitude, assets_attributes: [:id, :post_id, :file])
     end
 
     def posts_near(latitude,longitude,distance)
@@ -516,11 +507,15 @@ class PostsController < ApplicationController
       near_place_id = nil
       places.each do |place|
         distance = place.distance_from([latitude_start,longitude_start])
+        puts "------- DEBUGGING -------"
+        puts "#{place.title} - #{distance}"
+        puts "-------------------------"
         if distance < min_distance
           min_distance = distance
           near_place_id = place.id
         end
       end
       Post.find_by_id(near_place_id)
+      puts "selecciono #{Post.find_by_id(near_place_id).title}"
     end
 end

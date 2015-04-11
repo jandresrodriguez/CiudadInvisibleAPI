@@ -299,7 +299,7 @@ class PostsController < ApplicationController
             data.original_filename = image[:filename]
             data.content_type = image[:content_type]
             
-            @post.assets.create(file: data)
+            @post.assets.create(file: data, rotation: true)
 
           }
         end

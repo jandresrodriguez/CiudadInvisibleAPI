@@ -416,6 +416,20 @@ class PostsController < ApplicationController
     end
   end
 
+  # GET /draft_by_user/:id
+  def draft_by_user
+    begin
+      @user = User.find(params[:id])
+      if @user
+        render json: @user.posts.drafts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
+      else
+        render json: @post.errors, status: :unprocessable_entity 
+       end
+    rescue
+      render json: @post.errors, status: :unprocessable_entity 
+    end
+  end
+
   #-----------------------------------------------------------------------------------------------
   # API ENDPOINTS - PUBLIC
   #-----------------------------------------------------------------------------------------------
@@ -459,7 +473,13 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :user_id, :description, :images, :date, :location, :category, :latitude, :longitude, assets_attributes: [:id, :post_id, :file])#, assets_images: [:data, :filename, :content_type]) 
+      params.require(:post).permit(
+      :title, :user_id, :description, :images, 
+      :date, :location, :category, :latitude, 
+      :longitude, assets_attributes: [:id, :post_id, :file],
+      :draft
+      )
+      #, assets_images: [:data, :filename, :content_type]) 
       #params.require(:post).permit!
     end
 

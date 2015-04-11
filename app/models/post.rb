@@ -11,6 +11,10 @@ class Post < ActiveRecord::Base
   	:address => :location
   after_validation :reverse_geocode
 
+  scope :drafts, -> { where(draft: true) } 
+
+  scope :publics, -> { where(draft: false) } 
+
   def first_image
   	unless assets.nil? || assets.empty?
   		assets.first.file.url

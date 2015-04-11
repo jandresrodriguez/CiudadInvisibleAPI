@@ -359,17 +359,27 @@ class PostsController < ApplicationController
         tour.save!
         nearby_posts = Post.near([params[:latitude], params[:longitude]], 2, :units => :km).first(30)
         unless nearby_posts.empty?
+          puts "1"
           posts_to_see_unordered = nearby_posts.sample(5)
+          puts "2"
           start_point = closest(params[:latitude], params[:longitude], posts_to_see_unordered)
+          puts "3"
           posts_to_see_unordered.delete(start_point)
           i=1
           while posts_to_see_unordered.size > 0
+            puts "4"
             posts_to_see_unordered.delete(start_point)
+            puts "5"
             closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
+            puts "#{closest.title}"
             if closest
+              puts "6"
               place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
+              puts "7"
               i = i + 1
+              puts "8"
               start_point = closest
+              puts "9"
             end
           end
           puts "------- DEBUGGING -------"
@@ -512,15 +522,11 @@ class PostsController < ApplicationController
       near_place = nil
       places.try(:each) do |place|
         distance = place.distance_from([latitude_start,longitude_start])
-        puts "------- DEBUGGING -------"
-        puts "#{place.title} - #{distance}"
-        puts "-------------------------"
         if distance < min_distance
           min_distance = distance
           near_place = place
         end
       end
-      puts "selecciono #{near_place.title}"
       near_place
     end
 end

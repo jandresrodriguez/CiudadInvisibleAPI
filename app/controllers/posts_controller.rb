@@ -370,7 +370,7 @@ class PostsController < ApplicationController
           puts "8"
           start_point = closest(params[:latitude], params[:longitude], posts_to_see_unordered)
           puts "9"
-          PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: 1)
+          PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: 1)
           puts "10"
           posts_to_see_unordered.delete(start_point)
           puts "11"
@@ -382,7 +382,7 @@ class PostsController < ApplicationController
             puts "14"
             posts_to_see_unordered.delete(closest)
             puts "15"
-            place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, order: i)
+            place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
             puts "16"
             i = i + 1
             puts "17"

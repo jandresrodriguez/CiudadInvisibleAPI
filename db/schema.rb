@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141219022225) do
+ActiveRecord::Schema.define(version: 20150411194203) do
 
   create_table "assets", force: true do |t|
     t.integer  "post_id"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20141219022225) do
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+    t.boolean  "rotation",          default: false
   end
 
   add_index "assets", ["post_id"], name: "index_assets_on_post_id"
@@ -73,7 +74,7 @@ ActiveRecord::Schema.define(version: 20141219022225) do
     t.integer  "tour_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "order"
+    t.integer  "tour_order"
   end
 
   add_index "part_of_tours", ["post_id"], name: "index_part_of_tours_on_post_id"
@@ -101,6 +102,7 @@ ActiveRecord::Schema.define(version: 20141219022225) do
     t.integer  "user_id"
     t.float    "latitude"
     t.float    "longitude"
+    t.boolean  "draft",       default: true
   end
 
   create_table "posts_categories", force: true do |t|

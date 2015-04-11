@@ -366,9 +366,11 @@ class PostsController < ApplicationController
           while posts_to_see_unordered.size > 0
             posts_to_see_unordered.delete(start_point)
             closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
-            place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
-            i = i + 1
-            start_point = closest
+            if closest
+              place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
+              i = i + 1
+              start_point = closest
+            end
           end
           puts "------- DEBUGGING -------"
           puts "#{tour.part_of_tours.count}"

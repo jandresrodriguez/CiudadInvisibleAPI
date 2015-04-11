@@ -504,7 +504,7 @@ class PostsController < ApplicationController
 
     def closest(latitude_start,longitude_start, places)
       min_distance = 100000
-      near_place_id = nil
+      near_place = nil
       places.each do |place|
         distance = place.distance_from([latitude_start,longitude_start])
         puts "------- DEBUGGING -------"
@@ -512,10 +512,10 @@ class PostsController < ApplicationController
         puts "-------------------------"
         if distance < min_distance
           min_distance = distance
-          near_place_id = place.id
+          near_place = place
         end
       end
-      Post.find_by_id(near_place_id)
-      puts "selecciono #{Post.find_by_id(near_place_id).title}"
+      near_place
+      puts "selecciono #{near_place.title}"
     end
 end

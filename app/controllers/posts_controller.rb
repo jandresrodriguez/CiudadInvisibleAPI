@@ -508,7 +508,7 @@ class PostsController < ApplicationController
     def closest(latitude_start,longitude_start, places)
       min_distance = 100000
       near_place = nil
-      places.each do |place|
+      places.try(:each) do |place|
         distance = place.distance_from([latitude_start,longitude_start])
         puts "------- DEBUGGING -------"
         puts "#{place.title} - #{distance}"

@@ -373,7 +373,7 @@ class PostsController < ApplicationController
           puts "------- DEBUGGING -------"
           puts "#{tour.part_of_tours.count}"
           puts "-------------------------"
-          render json: tour.to_json(include: { part_of_tours: { include: :post } }), status: :ok
+          render json: tour.to_json(include: { part_of_tours: { include: { post: { include: { assets: { only: [:file_file_name, :file_content_type], methods: :file_url } } }}}}), status: :ok
         else
           render json: "Not nearby posts", status: :ok
         end

@@ -353,7 +353,6 @@ class PostsController < ApplicationController
   #POST /random_tour
   def random_tour
     begin
-      byebug
       if params[:latitude] && params[:longitude] && params[:user_id]
         tour = Tour.new
         tour.user_id = params[:user_id]

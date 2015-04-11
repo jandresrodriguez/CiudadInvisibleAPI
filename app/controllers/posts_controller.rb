@@ -390,7 +390,7 @@ class PostsController < ApplicationController
             puts "18"
           end
           puts "19"
-          render json: tour.to_json(include: :posts), status: :ok
+          render json: tour.to_json(include: [:posts, :part_of_tours]), status: :ok
         else
           puts "20"
           render json: "Not nearby posts", status: :ok

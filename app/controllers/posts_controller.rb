@@ -364,8 +364,8 @@ class PostsController < ApplicationController
           posts_to_see_unordered.delete(start_point)
           i=1
           while posts_to_see_unordered.size > 0
-            closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
             posts_to_see_unordered.delete(start_point)
+            closest = closest(start_point.latitude, start_point.longitude, posts_to_see_unordered)
             place_tour = PartOfTour.create(post_id: start_point.id, tour_id: tour.id, tour_order: i)
             i = i + 1
             start_point = closest

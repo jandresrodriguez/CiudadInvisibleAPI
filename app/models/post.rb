@@ -13,6 +13,8 @@ class Post < ActiveRecord::Base
 
   scope :drafts, -> { where(draft: true) } 
 
+  scope :publics, -> { where(draft: false) } 
+
   def first_image
   	unless assets.nil? || assets.empty?
   		assets.first.file.url

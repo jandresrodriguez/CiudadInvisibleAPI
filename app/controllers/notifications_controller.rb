@@ -19,7 +19,7 @@ class NotificationsController < ApplicationController
   def notifications_by_user
     begin
       if params[:user_id]
-        notifications = Notification.where(receiver_id: params[:user_id], read: false)
+        notifications = Notification.where(receiver_id: params[:user_id])
         unless notifications.empty?
           render json: notifications.to_json, status: :ok
         else

@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   post '/upload_assets' => 'posts#upload_assets'
   get '/popular_posts/:n' => 'posts#popular_posts'
   get '/draft_by_user/:id' => 'posts#draft_by_user'
+  get '/last_draft_by_user/:id' => 'posts#last_draft_by_user'
 
   get '/followed_posts/:user_id/:n' => 'posts#followed_posts'
 

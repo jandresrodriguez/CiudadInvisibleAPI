@@ -11,26 +11,26 @@ class Notification < ActiveRecord::Base
   	creator = User.find_by_id(self.creator.id)
   	case self.notification_type
   	when "Comment"
-  		self.title = "#{self.creator.username} has comment one of your Posts!"
+  		self.title = "#{self.creator.username} ha comentado en uno de sus posteos!"
       payload = {
         type: "Comment",
         entity_id: entity_id
       }
   	when "Favorite"
-  		self.title = "#{self.creator.username} has marked as favorite one of your Posts!"
+  		self.title = "#{self.creator.username} ha marcado como favorito uno de sus posteos!"
       payload = {
         type: "Favorite",
         entity_id: entity_id
       }
 		when "Following"
-  		self.title = "#{self.creator.username} has start to following you!"
+  		self.title = "#{self.creator.username} te esta siguiendo!"
       payload = {
         type: "Following",
         entity_id: entity_id
       }
   	when "Draft"
       post = Post.find_by_id(self.post.id)
-  		self.title = "#{self.post.title} is still in draft!"
+  		self.title = "#{self.post.title} continua en draft!"
       payload = {
         type: "Draft",
         entity_id: entity_id

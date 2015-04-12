@@ -437,7 +437,7 @@ class PostsController < ApplicationController
       if @user  && @user.posts.drafts.last
         render json: @user.posts.drafts.last.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else
-        head :ok
+        render json: "no drafts", status: :unprocessable_entity
        end
     rescue
       render json: @post.errors, status: :unprocessable_entity 

@@ -32,17 +32,27 @@ class CommentsController < ApplicationController
       if params[:post_id] && params[:user_id] && params[:text]
         @comment = Comment.new(comment_params)
         if @comment.save
+          puts "------- DEBUGGING -------"
+          puts "#{@comment}"
+          puts "-------------------------"
+          puts "1"
           notification = Notification.new(creator_id: @comment.user.id, receiver_id: @comment.post.user.id, post_id: @comment.post.id, notification_type: "Comment")
+          puts "2"
           notification.set_notification_data()
+          puts "3"
           Notifier.send_notification(notification)
+          puts "4"
           render json: "comment created successfully", status: :ok
         else
+          puts "5"
           render json: @comment.errors, status: :unprocessable_entity
         end
       else
+        puts "6"
         render json: "wrong params", status: :unprocessable_entity
       end
     rescue 
+      puts "7"
       render json: @comment.errors, status: :unprocessable_entity
     end
   end

@@ -11,6 +11,8 @@ class Post < ActiveRecord::Base
   	:address => :location
   after_validation :reverse_geocode
 
+  default_scope { where(draft: false) }
+
   scope :drafts, -> { where(draft: true) } 
 
   scope :publics, -> { where(draft: false) } 

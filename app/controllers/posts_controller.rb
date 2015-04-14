@@ -421,7 +421,7 @@ class PostsController < ApplicationController
     begin
       @user = User.find(params[:id])
       if @user
-        render json: @user.posts.drafts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
+        render json: @user.posts.unscoped.drafts.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else
         render json: @post.errors, status: :unprocessable_entity 
        end
@@ -435,7 +435,7 @@ class PostsController < ApplicationController
     begin
       @user = User.find(params[:id])
       if @user  && @user.posts.drafts.last
-        render json: @user.posts.drafts.last.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
+        render json: @user.posts.unscoped.drafts.last.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else
         render json: "no drafts", status: :unprocessable_entity
        end

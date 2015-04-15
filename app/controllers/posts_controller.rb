@@ -434,7 +434,7 @@ class PostsController < ApplicationController
   def last_draft_by_user
     begin
       @user = User.find(params[:id])
-      if @user  && @user.posts.drafts.last
+      if @user  && @user.posts.unscoped.drafts.last
         render json: @user.posts.unscoped.drafts.last.to_json(:include => { :assets => {:only => [:file_file_name, :file_content_type],:methods => :file_url }}, :methods => [:author, :favorites_quantity, :comments])
       else
         render json: "no drafts", status: :unprocessable_entity

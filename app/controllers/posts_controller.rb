@@ -284,7 +284,7 @@ class PostsController < ApplicationController
   # POST /assets_mobile/:id
   def assets_mobile
     begin
-      @post = Post.find(params[:id].to_i)
+      @post = Post.unscoped.find(params[:id].to_i)
       # Asigna los assets
       if params[:assets_attributes]
         params[:assets_attributes].each { |key, photo|

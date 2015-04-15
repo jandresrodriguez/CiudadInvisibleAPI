@@ -97,7 +97,7 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     begin
-      @post.unscoped.update(post_params)
+      @post.update(post_params)
       if params[:assets_images]
         params[:assets_images].each { |image|
           # Crea la imagen a partir del data
@@ -482,7 +482,7 @@ class PostsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
-      @post = Post.find(params[:id])
+      @post = Post.unscoped.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

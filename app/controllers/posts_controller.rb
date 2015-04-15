@@ -97,7 +97,7 @@ class PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     begin
-      @post.update(post_params)
+      @post.unscoped.update(post_params)
       if params[:assets_images]
         params[:assets_images].each { |image|
           # Crea la imagen a partir del data
